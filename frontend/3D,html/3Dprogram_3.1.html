@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D场景数据渲染系统 - 对话版</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <style>:root{
+    --btn-size:60px;
+    --main-color:#fff;
+    --hover-color:#ffd700;
+    --glow-size:2px;
+    --anim-speed:0.3s
+}
+/* 全局盒模型修复，解决溢出问题 */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body { 
+    margin: 0; 
+    overflow: hidden; 
+    font-family: 'Segoe UI', sans-serif;
+    /* 核心渐变：左深青褐 → 中间暖米金 → 右深青褐 */
+    background-image: linear-gradient(to right, #1A2C2E, #F2D194, #1A2C2E);
+    min-height: 100vh;
+}
+
+/* --- 视频播放样式 --- */
+#video-container {
+    /* 占满整个浏览器屏幕 */
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    /* 核心：flex布局实现水平+垂直居中 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* 背景色（和你原有黑色保持一致，左右留白就是这个颜色） */
+    background-color: #000;
+    overflow: hidden;
+}
+#video-container video {
+    /* 核心：控制左右留白，设置最大宽度为屏幕宽度的80%，左右各留10%的边距 */
+    max-width: 80vw;
+    /* 限制最大高度，防止视频超出屏幕上下 */
+    max-height: 95vh;
+    /* 宽高自适应，完美保持视频原始比例，不会拉伸变形 */
+    width: auto;
+    height: auto;
+    /* 完整显示整个视频，不做任何裁剪 */
+    object-fit: contain;
+    display: block;
+}
+#skip-hint {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    pointer-events: none;
+    animation: pulse 1.5s infinite;
+    z-index: 2010;
+}
+#end-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 120px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    z-index: 2020;
+    display: none;
+    animation: fadeInScale 0.8s ease-out forwards;
+}
+@keyframes pulse {
+    0% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+    100% { opacity: 0.6; transform: scale(1); }
+}
+@keyframes fadeInScale {
+    from { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+/* --- 视频样式结束 --- */
+
+/* --- 竖排书法打字机样式 --- */
+.calligraphy-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    cursor: pointer;
+    z-index: 1500;
+    background-color: #f4f1e8;
+    display: none;
+    pointer-events:none;
+    opacity:0;
+    transition:opacity 0.3s;
+}
+.calligraphy-container.active{
+    opacity:1;
+    pointer-events:auto;
+}
+.calligraphy-bg-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 1;
+}
+.calligraphy-page {
+    display: none;
+    position: absolute;
+    top: 4vh;
+    left: 4vw;
+    z-index: 10;
+}
+.calligraphy-page.active {
+    display: block;
+}
+.calligraphy-text {
+    writing-mode: vertical-lr;
+    max-height: 92vh;
+    font-family: 'Ma Shan Zheng', cursive, "楷体", "楷体_GB2312", "宋体", sans-serif;
+    color: #000000;
+    font-size: 3.8rem;
+    line-height: 1.6;
+    letter-spacing: 0.8rem;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: rgba(255, 255, 255, 0.25);
+    padding: 1rem;
+    border-radius: 6px;
+}
+@media (max-width: 768px) {
+    .calligraphy-text {
+        font-size: 2rem;
+        letter-spacing: 0.4rem;
+        line-height: 1.5;
+        max-height: 90vh;
+        padding: 0.8rem;
+    }
+}
+/* --- 书法样式结束 --- */
+
+/* 场景选择界面样式 - 新增渐变背景 */
+#scene-selector {
+    position: fixed; /* ✅ 保留 fixed，以视口为定位基准 */
+    top: 0; 
+    left: 0; 
+    width: 100vw;
+    height: 100vh;
+    background-image: linear-gradient(to right, #1A2C2E, #F2D194, #1A2C2E);
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center;
+    z-index: 1000; 
+    color: white; 
+    text-align: center; 
+    padding: 20px;
+    overflow: visible;
+}
+
+/* 新增：场景选择器背景容器 */
+#scene-bg-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow: hidden;
+}
+
+#scene-bg-img, #scene-bg-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* 完全匹配原background-size: auto 100% 效果 */
+    height: 100%;
+    width: auto;
+    display: none;
+}
+
+#scene-buttons { 
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10; /* 确保按钮在视频之上 */
+}
+
+#scene-tooltip {
+    z-index: 20; /* 确保提示在视频之上 */
+}
+
+/* 锥形星芒场景按钮样式 */
+.scene-btn{
+    width:var(--btn-size);
+    height:var(--btn-size);
+    border:none;
+    background:transparent;
+    cursor:pointer;
+    transition:transform var(--anim-speed) ease-out;
+    position: absolute;
+    pointer-events: auto;
+}
+.scene-btn:hover{
+    transform:scale(1.15);
+}
+.scene-btn:active{
+    transform:scale(1.08);
+}
+
+/* 场景名称提示气泡 */
+#scene-tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 16px;
+    pointer-events: none;
+    z-index: 1001;
+    opacity: 0;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+}
+#scene-tooltip.show {
+    opacity: 1;
+}
+
+/* 3D画布容器样式 */
+#canvas-container { 
+    display: none; 
+    width: 100%; 
+    height: 100%; 
+    position: relative; 
+}
+
+/* 鼠标锁定提示文字 */
+#lock-tip { 
+    display: none; 
+    position: absolute; 
+    top: 20px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    color: white; 
+    z-index: 100; 
+}
+
+/* 准星样式 */
+#crosshair { 
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    width: 20px; 
+    height: 20px; 
+    transform: translate(-50%, -50%); 
+    z-index: 90; 
+    pointer-events: none; 
+    opacity: 0; 
+    transition: opacity 0.2s; 
+}
+#crosshair::before, #crosshair::after { 
+    content: ''; 
+    position: absolute; 
+    background: white; 
+    box-shadow: 0 0 2px black; 
+}
+#crosshair::before { 
+    width: 2px; 
+    height: 20px; 
+    left: 9px; 
+    top: 0; 
+}
+#crosshair::after { 
+    width: 20px; 
+    height: 2px; 
+    top: 9px; 
+    left: 0; 
+}
+
+/* 弹窗遮罩 */
+#overlay { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    background: rgba(0, 0, 0, 0.7); 
+    display: none; 
+    z-index: 150; 
+}
+
+/* 对话弹窗 */
+#popup { 
+    position: absolute; 
+    bottom: 0; 
+    left: 0; 
+    right: 0; 
+    width: 100%; 
+    height: 33.333vh;
+    background: rgba(0, 0, 0, 0.35);
+    color: #e0e0e0; 
+    display: none; 
+    z-index: 200; 
+    padding: 20px; 
+    box-sizing: border-box;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}
+#popup-title { 
+    position: absolute; 
+    bottom: 20px; 
+    left: 20px; 
+    font-size: 24px; 
+    font-weight: bold; 
+    color: #fff; 
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    z-index: 10;
+}
+#popup-text { 
+    margin-bottom: 20px; 
+    line-height: 1.6; 
+    min-height: 40px; 
+    max-width: 80%;
+    text-align: center;
+    font-size: 18px;
+}
+#options-container { 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 20px;
+}
+.dialogue-btn { 
+    width: 100%; 
+    max-width: 400px;
+    padding: 12px 20px; 
+    margin-bottom: 10px; 
+    background: rgba(255, 255, 255, 0.15); 
+    border: 1px solid rgba(255, 255, 255, 0.3); 
+    color: white; 
+    text-align: center; 
+    cursor: pointer; 
+    border-radius: 8px; 
+    transition: background 0.2s; 
+    font-size: 16px;
+}
+.dialogue-btn:hover { 
+    background: rgba(255, 255, 255, 0.25); 
+    border-color: rgba(255, 255, 255, 0.5); 
+}
+/* 修复：移除display冲突，初始状态只保留display:none */
+#input-area { 
+    display: none; 
+    margin-top: 10px; 
+    width: 100%;
+    max-width: 500px;
+    justify-content: center;
+}
+#user-input { 
+    width: 100%;
+    padding: 12px; 
+    background: rgba(0, 0, 0, 0.5); 
+    border: 1px solid rgba(255, 255, 255, 0.3); 
+    color: white; 
+    border-radius: 8px; 
+    font-size: 16px;
+}
+.close-btn { 
+    position: absolute; 
+    top: 15px; 
+    right: 20px; 
+    color: #fff; 
+    cursor: pointer; 
+    font-size: 32px; 
+    font-weight: bold; 
+    transition: color 0.2s; 
+    opacity: 0.8;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+.close-btn:hover { 
+    color: #fff; 
+    opacity: 1;
+}</style>
+</head>
+<body>
+    <!-- --- 视频播放容器 --- -->
+    <div id="video-container">
+        <video id="myVideo" autoplay muted playsinline>
+            <source src="" type="video/mp4">
+            您的浏览器不支持 HTML5 视频。
+        </video>
+        <div id="skip-hint">点击任意位置跳过</div>
+    </div>
+    <div id="end-message">完事了</div>
+
+<!-- --- 竖排书法打字机容器（支持视频背景版） --- -->
+<div class="calligraphy-container" id="calligraphy-app">
+    <!-- 原有图片背景（保留兼容） -->
+    <img id="calligraphy-bg-img" alt="宣纸书法背景" class="calligraphy-bg-img">
+    <!-- 新增：视频背景（核心修改） -->
+    <video id="calligraphy-bg-video" alt="书法背景视频" class="calligraphy-bg-img" muted loop playsinline></video>
+    
+    <div class="calligraphy-page" id="calligraphy-page1">
+        <div class="calligraphy-text" id="calligraphy-text1"></div>
+    </div>
+    <div class="calligraphy-page" id="calligraphy-page2">
+        <div class="calligraphy-text" id="calligraphy-text2"></div>
+    </div>
+    <div class="calligraphy-page" id="calligraphy-page3">
+        <div class="calligraphy-text" id="calligraphy-text3"></div>
+    </div>
+</div>
+
+    <!-- 场景选择界面 -->
+    <div id="scene-selector">
+        <!-- 背景视频 -->
+        <video id="selector-bg-video" autoplay muted loop playsinline>
+            <source src="3dmod_and_pic/pic/vd/main.mp4" type="video/mp4">
+        </video>
+        <!-- 前景内容 -->
+        <div id="scene-tooltip"></div>
+        <div id="scene-buttons">
+    <!-- ✅ 完全清空，依赖动态生成 -->
+</div>
+    </div>
+    
+    <!-- 3D渲染主容器 -->
+    <div id="canvas-container">
+        <div id="lock-tip">点击页面锁定鼠标，拖动转动视角 (右键交互)</div>
+        <div id="crosshair"></div>
+        <div id="overlay"></div>
+        <div id="popup">
+            <span class="close-btn" onclick="closePopup()">×</span>
+            <div id="popup-title">对话</div>
+            <div id="popup-text"></div>
+            <div id="options-container"></div>
+            <div id="input-area">
+                <input type="text" id="user-input" placeholder="输入你想说的... (按回车发送)">
+            </div>
+        </div>
+    </div>
+
+<!-- 模块导入映射 -->
+<script type="importmap">
+{
+    "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+    }
+}
+</script>
+
+<script type="module">
+// 导入外部场景配置和Three.js核心/扩展
+import { book } from './book.js'; 
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+// ===================== 全局变量与DOM缓存 =====================
+let currentDialogueData, currentNodeId, currentInteractable;
+let scene, camera, renderer;
+let isMouseLocked = false, isPopupOpen = false;
+let animateFrameId = null;
+const [popupEl, overlayEl, titleEl, textEl, optionsContainer, inputArea, userInputEl, crosshair, lockTip] = 
+    ['popup','overlay','popup-title','popup-text','options-container','input-area','user-input','crosshair','lock-tip'].map(id => document.getElementById(id));
+let cu;
+
+let videoEl, videoContainerEl, skipHintEl, endMessageEl;
+
+let calligraphyContainerEl;
+let calligraphyCurrentPage = 0;
+let calligraphyIsAnimating = false;
+let calligraphyConfig = null;
+let typewriterLock = false;
+let typewriterTimerPool = [];
+
+const modelStates = new Map();
+const clock = new THREE.Clock();
+
+const GLOBAL_CONFIG = {
+    cameraMinY:15, 
+    moveSpeed:2.5, 
+    flySpeed:30, 
+    jumpForce:8, 
+    gravity:20,
+    crouchScale:0.5, 
+    doubleClickDelay:300, 
+    boundaries:48, 
+    lookSensitivity:0.002
+};
+const add_api = "http://127.0.0.1:5000/api/chat_text";
+
+// ===================== 书法打字机核心逻辑 =====================
+// ===================== 书法打字机核心逻辑（支持视频背景） =====================
+let calligraphyVideoEl; // 新增视频DOM
+
+function clearAllTypewriterTimer() {
+  typewriterTimerPool.forEach(t=>clearTimeout(t));
+  typewriterTimerPool = [];
+}
+
+function initCalligraphyElements() {
+    calligraphyContainerEl = document.getElementById('calligraphy-app');
+    window.calligraphyBgImgEl = document.getElementById('calligraphy-bg-img');
+    calligraphyVideoEl = document.getElementById('calligraphy-bg-video'); // 初始化视频
+}
+
+function startCalligraphyTypewriter(config, onEnd) {
+    try {
+        if (!calligraphyContainerEl) return;
+        if(typewriterLock) return;
+
+        calligraphyConfig = config;
+        calligraphyCurrentPage = 0;
+        calligraphyIsAnimating = false;
+        clearAllTypewriterTimer();
+
+        // 重置所有媒体
+        window.calligraphyBgImgEl.style.display = 'none';
+        calligraphyVideoEl.style.display = 'none';
+        calligraphyVideoEl.pause();
+
+        document.getElementById('scene-selector').style.display = 'none';
+        calligraphyContainerEl.style.display = 'block';
+        calligraphyContainerEl.classList.add('active');
+
+        for(let i=1; i<=3; i++) {
+            const el = document.getElementById(`calligraphy-text${i}`);
+            if(el) el.innerHTML = '';
+            const page = document.getElementById(`calligraphy-page${i}`);
+            if(page) page.classList.remove('active');
+        }
+
+        calligraphyContainerEl.onclick = handleCalligraphyClick;
+
+        typewriterLock = true;
+        goToCalligraphyPage(0, onEnd);
+    } catch(e) {
+        console.error("打字机异常兜底：",e);
+        clearAllTypewriterTimer();
+        typewriterLock = false;
+        if(onEnd) onEnd();
+    }
+}
+
+function typeCalligraphyText(text, element, speed, onFinish) {
+    return new Promise((resolve) => {
+        let index = 0;
+        element.innerHTML = '';
+        calligraphyIsAnimating = true;
+
+        clearAllTypewriterTimer();
+
+        function typeChar() {
+            if (!typewriterLock) {
+                resolve();
+                return;
+            }
+            if (index < text.length) {
+                element.innerHTML += text[index] === ' ' ? '&nbsp;' : text[index];
+                index++;
+                let t = setTimeout(typeChar, speed);
+                typewriterTimerPool.push(t);
+            } else {
+                calligraphyIsAnimating = false;
+                if(onFinish) onFinish();
+                resolve();
+            }
+        }
+        let t = setTimeout(typeChar, speed);
+        typewriterTimerPool.push(t);
+    });
+}
+
+async function goToCalligraphyPage(pageIndex, onEndCallback) {
+    if (!typewriterLock) {
+        finishCalligraphy(onEndCallback);
+        return;
+    }
+
+    const totalPages = calligraphyConfig.pageContent.length;
+
+    if (pageIndex >= totalPages) {
+        finishCalligraphy(onEndCallback);
+        return;
+    }
+
+    clearAllTypewriterTimer();
+    calligraphyIsAnimating = false;
+
+    document.querySelectorAll('.calligraphy-page').forEach(page => {
+        page.classList.remove('active');
+    });
+
+    // 切换背景：优先视频，没有则用图片
+    if (calligraphyConfig) {
+        const mediaKey = `p${pageIndex}`;
+        
+        // 1. 先停止并隐藏所有媒体
+        if (calligraphyVideoEl) {
+            calligraphyVideoEl.pause();
+            calligraphyVideoEl.style.display = 'none';
+        }
+        if (window.calligraphyBgImgEl) {
+            window.calligraphyBgImgEl.style.display = 'none';
+        }
+
+        // 2. 加载视频
+        if (calligraphyConfig.vid && calligraphyConfig.vid[mediaKey]) {
+            const videoUrl = calligraphyConfig.vid[mediaKey];
+            
+            // 核心修复：设置 src 并显式调用 load()
+            calligraphyVideoEl.src = videoUrl;
+            calligraphyVideoEl.load(); 
+            
+            calligraphyVideoEl.style.display = 'block';
+            
+            // 核心修复：等待视频可以播放时再尝试播放
+            calligraphyVideoEl.oncanplay = () => {
+                calligraphyVideoEl.play().catch(err => {
+                    console.warn('视频自动播放被阻止或失败:', err);
+                });
+            };
+        } 
+        // 3. 加载图片（兼容原有逻辑）
+        else if (calligraphyConfig.pic && calligraphyConfig.pic[mediaKey]) {
+            window.calligraphyBgImgEl.src = calligraphyConfig.pic[mediaKey];
+            window.calligraphyBgImgEl.style.display = 'block';
+        }
+    }
+
+    calligraphyCurrentPage = pageIndex;
+    const currentPageEl = document.getElementById(`calligraphy-page${calligraphyCurrentPage + 1}`);
+    const currentTextEl = document.getElementById(`calligraphy-text${calligraphyCurrentPage + 1}`);
+   
+    
+    if(!currentPageEl || !currentTextEl) {
+        console.warn("书法页面元素未找到，直接进入场景");
+        finishCalligraphy(onEndCallback);
+        return;
+    }
+
+    currentPageEl.classList.add('active');
+
+    await typeCalligraphyText(
+        calligraphyConfig.pageContent[calligraphyCurrentPage], 
+        currentTextEl, 
+        calligraphyConfig.typeSpeed
+    );
+    
+    goToCalligraphyPage(calligraphyCurrentPage + 1, onEndCallback);
+}
+
+function handleCalligraphyClick() {
+    if (!calligraphyConfig || !typewriterLock) return;
+    
+    clearAllTypewriterTimer();
+    
+    const currentTextEl = document.getElementById(`calligraphy-text${calligraphyCurrentPage + 1}`);
+    if(currentTextEl) {
+        currentTextEl.innerHTML = calligraphyConfig.pageContent[calligraphyCurrentPage].replaceAll(' ', '&nbsp;');
+    }
+    calligraphyIsAnimating = false;
+
+    goToCalligraphyPage(calligraphyCurrentPage + 1, window.currentOnEnd);
+}
+
+function finishCalligraphy(onEndCallback) {
+    clearAllTypewriterTimer();
+    typewriterLock = false;
+    
+    // 停止视频
+    if(calligraphyVideoEl) {
+        calligraphyVideoEl.pause();
+        calligraphyVideoEl.oncanplay = null; // 移除事件监听器，防止内存泄漏
+        calligraphyVideoEl.removeAttribute('src'); // 彻底清空 src
+        calligraphyVideoEl.load(); // 触发重置
+    }
+    
+    if (calligraphyContainerEl) {
+        calligraphyContainerEl.style.display = 'none';
+        calligraphyContainerEl.classList.remove('active');
+        calligraphyContainerEl.onclick = null;
+    }
+    
+    calligraphyConfig = null;
+
+    setTimeout(() => {
+        if (onEndCallback) {
+            onEndCallback();
+        }
+    }, 500);
+}
+
+// ===================== 视频播放核心逻辑 =====================
+function initVideoElements() {
+    videoEl = document.getElementById('myVideo');
+    videoContainerEl = document.getElementById('video-container');
+    skipHintEl = document.getElementById('skip-hint');
+    endMessageEl = document.getElementById('end-message');
+}
+
+function playVideo(videoUrl, onVideoEnd) {
+    if (!videoEl || !videoContainerEl) return;
+
+    videoContainerEl.style.display = 'block';
+    endMessageEl.style.display = 'none';
+    skipHintEl.style.display = 'block';
+    
+    videoEl.src = videoUrl;
+    videoEl.muted = true;
+    videoEl.currentTime = 0;
+    
+    videoEl.play().catch((err) => {
+        console.warn("自动播放被阻止，等待用户交互:", err);
+    });
+
+    function finishVideo() {
+        if (endMessageEl.style.display === 'block') return;
+        videoEl.pause();
+        videoContainerEl.style.display = 'none';
+        endMessageEl.style.display = 'block';
+
+        setTimeout(() => {
+            endMessageEl.style.display = 'none';
+            if (onVideoEnd) onVideoEnd();
+        }, 1200);
+    }
+
+    videoEl.addEventListener('ended', finishVideo, { once: true });
+    videoContainerEl.addEventListener('click', finishVideo, { once: true });
+}
+
+// ===================== 核心交互事件处理 =====================
+function setupCoreInteractionHandlers() {
+    window.handleRightClick = function(e) {
+        if (e.button !== 2 || isPopupOpen) return;
+        e.preventDefault();
+        
+        if (typeof window.checkInteraction !== 'function') {
+            console.error('[交互错误] window.checkInteraction 未初始化');
+            return;
+        }
+
+        const rect = renderer.domElement.getBoundingClientRect();
+        let x, y;
+
+        if (isMouseLocked) {
+            x = 0; y = 0;
+        } else {
+            x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+            y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+            
+            if (x < -1 || x > 1 || y < -1 || y > 1) return;
+        }
+
+        window.checkInteraction(x, y);
+    };
+
+    window.handleEnterKey = function(e) {
+        if (e.key === 'Enter' && isPopupOpen) {
+            const isInputVisible = window.getComputedStyle(inputArea).display !== 'none';
+            if (isInputVisible && typeof window.handleUserInput === 'function') {
+                window.handleUserInput();
+                e.preventDefault();
+            }
+        }
+    };
+}
+
+// ===================== 第一人称控制器 =====================
+function initFirstPersonController(camera, renderer, config) {
+    const keys = { w:false, a:false, s:false, d:false, space:false, shift:false };
+    const ctrlClock = new THREE.Clock(), velocity = new THREE.Vector3(), direction = new THREE.Vector3();
+    const euler = new THREE.Euler(0,0,0,'YXZ');
+    let verticalVelocity = 0, isFlying = false, lastSpacePressTime = 0;
+    const originalHeight = config.cameraMinY, crouchHeight = originalHeight * config.crouchScale;
+    let currentTargetHeight = originalHeight;
+
+    document.addEventListener('click', () => {
+        if (renderer?.domElement && !isMouseLocked && !isPopupOpen && document.pointerLockElement !== renderer.domElement) {
+            renderer.domElement.requestPointerLock().catch(err => console.warn('指针锁定失败:', err));
+        }
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if(!isMouseLocked) return;
+        euler.y -= e.movementX * config.lookSensitivity;
+        euler.x -= e.movementY * config.lookSensitivity;
+        euler.x = THREE.MathUtils.clamp(euler.x, -Math.PI/2 + 0.01, Math.PI/2 - 0.01);
+        camera.quaternion.setFromEuler(euler);
+    });
+
+    document.addEventListener('pointerlockchange', () => {
+        isMouseLocked = document.pointerLockElement === renderer.domElement;
+        lockTip.style.display = isMouseLocked ? 'none' : 'block';
+        crosshair.style.opacity = isMouseLocked ? '1' : '0';
+    });
+
+    document.addEventListener('keydown', (e) => {
+        const key = (e.key ?? '').toLowerCase();
+        if(['w','a','s','d'].includes(key)) keys[key] = true;
+        if(key === ' ') {
+            e.preventDefault();
+            keys.space = true;
+            const now = Date.now();
+            if(now - lastSpacePressTime < config.doubleClickDelay) { 
+                isFlying = !isFlying; 
+                verticalVelocity = 0; 
+            }
+            lastSpacePressTime = now;
+        }
+        if(key === 'shift') { 
+            keys.shift = true; 
+            if(!isFlying) currentTargetHeight = crouchHeight; 
+        }
+    });
+
+    document.addEventListener('keyup', (e) => {
+        const key = (e.key ?? '').toLowerCase();
+        if(['w','a','s','d'].includes(key)) keys[key] = false;
+        if(key === ' ') keys.space = false;
+        if(key === 'shift') { 
+            keys.shift = false; 
+            currentTargetHeight = originalHeight; 
+        }
+    });
+
+    (function updateMovement() {
+        requestAnimationFrame(updateMovement);
+        const delta = ctrlClock.getDelta()*30;
+        const isCrouching = (camera.position.y > currentTargetHeight + 0.01 || currentTargetHeight === crouchHeight);
+        const speedMod = (isCrouching && !isFlying) ? 0.5 : 1;
+        const currentSpeed = (isFlying ? config.flySpeed : config.moveSpeed) * speedMod;
+
+        velocity.set(0,0,0);
+        if(keys.w) velocity.z -=1; 
+        if(keys.s) velocity.z +=1; 
+        if(keys.a) velocity.x -=1; 
+        if(keys.d) velocity.x +=1;
+        direction.copy(velocity).normalize().applyQuaternion(camera.quaternion);
+        
+        camera.position.x += direction.x * currentSpeed * delta;
+        camera.position.z += direction.z * currentSpeed * delta;
+
+        if(isFlying) {
+            verticalVelocity = 0;
+            if(keys.space) verticalVelocity =5; 
+            if(keys.shift) verticalVelocity =-5;
+            camera.position.y += verticalVelocity * delta;
+        } else {
+            if(camera.position.y <= originalHeight +0.1) {
+                camera.position.y = THREE.MathUtils.lerp(camera.position.y, currentTargetHeight, delta *10);
+                if(keys.space && Math.abs(camera.position.y - currentTargetHeight) <0.1) {
+                    verticalVelocity = config.jumpForce;
+                }
+            } else {
+                verticalVelocity -= config.gravity * delta;
+                camera.position.y += verticalVelocity * delta;
+            }
+            if(camera.position.y < originalHeight) { 
+                camera.position.y = originalHeight; 
+                verticalVelocity =0; 
+            }
+        }
+    })();
+}
+
+// ===================== GLB 状态机核心逻辑 =====================
+function setModelState(key, stateName) {
+    const stateData = modelStates.get(key);
+    if (!stateData) return;
+
+    const { mesh, mixer, clips, stateActions } = stateData;
+    const actionConfig = stateActions[stateName];
+    
+    if (!actionConfig) {
+        console.warn(`State "${stateName}" not found for object "${key}"`);
+        return;
+    }
+
+    if (actionConfig.position) mesh.position.set(...actionConfig.position);
+    if (actionConfig.rotation) mesh.rotation.set(...actionConfig.rotation);
+    if (actionConfig.scale) mesh.scale.set(...actionConfig.scale);
+    
+    mesh.visible = actionConfig.visible !== false;
+    if (actionConfig.targetPosition) {
+    // 兜底：如果属性不存在，先初始化
+    if (!stateData.startPosition) stateData.startPosition = new THREE.Vector3();
+    if (!stateData.targetPosition) stateData.targetPosition = new THREE.Vector3();
+    if (!stateData.moveDirection) stateData.moveDirection = new THREE.Vector3();
+    
+    // 优先用模型当前位置作为起点，避免配置position和模型实际位置不一致的问题
+    stateData.startPosition.copy(stateData.mesh.position);
+    // 如果配置了position，用配置的位置覆盖
+    if (actionConfig.position) stateData.startPosition.set(...actionConfig.position);
+    
+    stateData.targetPosition.set(...actionConfig.targetPosition);
+    stateData.speed = actionConfig.speed || stateData.speed || 1;
+    stateData.moveDirection.subVectors(stateData.targetPosition, stateData.startPosition);
+    stateData.moveDistance = stateData.moveDirection.length();
+    // 防止距离为0导致的方向异常
+    if (stateData.moveDistance > 0.001) {
+        stateData.moveDirection.normalize();
+    }
+    stateData.moveProgress = 0;
+    stateData.isMoving = true;
+} else {
+    stateData.isMoving = false;
+}
+    if (mixer && clips && actionConfig.path) {
+        mixer.stopAllAction();
+        
+        let clip = THREE.AnimationClip.findByName(clips, actionConfig.path);
+        
+        if (!clip && clips.length > 0) {
+            console.warn(`Clip "${actionConfig.path}" not found, falling back to first clip.`);
+            clip = clips[0];
+        }
+
+        if (clip) {
+            const action = mixer.clipAction(clip);
+            action.setLoop(actionConfig.loop ? THREE.LoopRepeat : THREE.LoopOnce);
+            if (!actionConfig.loop) action.clampWhenFinished = true;
+            action.reset().play();
+        }
+    }
+
+    stateData.currentState = stateName;
+}
+
+// ===================== 场景渲染与物体生成 =====================
+function renderSceneFromBook(bookKey, scene, camera, renderer, bookData) {
+    const data = bookData[bookKey];
+    const objectMap = new Map();
+
+    if(data.weather) {
+        switch(data.weather) {
+            case 'sunny': 
+                // scene.fog = new THREE.FogExp2(0x87CEEB, 0.0015); 
+                renderer.setClearColor(0x87CEEB); 
+                break;
+            case 'night': 
+                // scene.fog = new THREE.FogExp2(0x0A1128, 0.001); 
+                renderer.setClearColor(0x0A1128); 
+                break;
+        }
+    }
+
+    const addObject = (mesh, item, key) => {
+        if(item.set_) mesh.position.set(...item.set_);
+        if(item.size_) mesh.scale.set(...item.size_);
+        mesh.name = key; 
+        scene.add(mesh); 
+        objectMap.set(mesh, item);
+    };
+
+    const textureLoader = new THREE.TextureLoader();
+    const gltfLoader = new GLTFLoader();
+
+    if(data.obj_man) {
+        for(const key in data.obj_man) {
+            const item = data.obj_man[key];
+
+            if(item.func) { 
+        const groundMesh = item.func();
+        if(item.set_) groundMesh.position.set(...item.set_);
+        if(item.size_) groundMesh.scale.set(...item.size_); // 可选：增加缩放支持
+        groundMesh.name = key;
+        scene.add(groundMesh);
+        objectMap.set(groundMesh, item);
+        continue;
+}      
+
+            if(item.path) {
+                const { kind, path_ } = item.path;
+                let mesh;
+
+                if(kind === 'jpg') {
+                    const texture = textureLoader.load(path_);
+                    const geo = new THREE.PlaneGeometry(10, 10);
+                    const mat = new THREE.MeshStandardMaterial({
+                        map: texture,
+                        side: THREE.DoubleSide,
+                        roughness: 0.8
+                    });
+                    mesh = new THREE.Mesh(geo, mat);
+                    addObject(mesh, item, key);
+                }
+
+                if(kind === 'glb') {
+                    gltfLoader.load(path_, (gltf) => {
+                        mesh = gltf.scene;
+                        mesh.name = key;
+                        
+                        if(item.set_) mesh.position.set(...item.set_);
+                        if(item.size_) mesh.scale.set(...item.size_);
+                        if(item.rotation) mesh.rotation.set(...item.rotation);
+
+                        scene.add(mesh);
+                        objectMap.set(mesh, item);
+
+                        if (item.stateActions) {
+                            const mixer = new THREE.AnimationMixer(mesh);
+                            const clips = gltf.animations;
+                            
+                            modelStates.set(key, {
+                                mesh: mesh,
+                                mixer: mixer,
+                                clips: clips,
+                                stateActions: item.stateActions,
+                                currentState: null,
+                                speed: item.speed || 1,
+                                isMoving: false,
+                                startPosition: new THREE.Vector3(),
+                                targetPosition: new THREE.Vector3(),
+                                moveDirection: new THREE.Vector3(),
+                                moveDistance: 0,
+                                moveProgress: 0
+                            });
+
+                            if (item.initialState) {
+                                setModelState(key, item.initialState);
+                            }
+                        }
+                    });
+                    continue;
+                }
+                continue;
+            }
+
+            if(key.startsWith('a') && item.primitive) {
+                let geo, mat, color = item.color||0x00ff88;
+                switch(item.primitive) {
+                    case 'box': 
+                        geo = new THREE.BoxGeometry(1,1,1); 
+                        break;
+                    case 'sphere': 
+                        geo = new THREE.SphereGeometry(0.5,16,16); 
+                        break;
+                }
+                
+                if(geo) {
+                    mat = new THREE.MeshStandardMaterial({color});
+                    const mesh = new THREE.Mesh(geo, mat);
+                    if(!item.set_) item.set_ = [0,0,0];
+                    if(!item.size_) item.size_ = [1,1,1];
+                    addObject(mesh, item, key);
+                }
+            }
+            
+            if (item.stateActions && !item.path) {
+                 let geo = new THREE.BoxGeometry(2, 2, 2);
+                 let mat = new THREE.MeshStandardMaterial({color: item.color || 0xffaa00, wireframe: true});
+                 const mesh = new THREE.Mesh(geo, mat);
+                 
+                 if(!item.set_) item.set_ = [0,0,0];
+                 if(!item.size_) item.size_ = [1,1,1];
+                 
+                 addObject(mesh, item, key);
+                 
+                 modelStates.set(key, {
+                    mesh: mesh,
+                    mixer: null,
+                    clips: [],
+                    stateActions: item.stateActions,
+                    currentState: null,
+                    speed: item.speed || 1,           // 从配置取速度，默认1
+                    isMoving: false,                  // 是否正在移动
+                    startPosition: new THREE.Vector3(),// 移动起点
+                    targetPosition: new THREE.Vector3(),// 移动终点
+                    moveDirection: new THREE.Vector3(),// 移动方向
+                    moveDistance: 0,                   // 移动总距离
+                    moveProgress: 0                     // 当前移动进度
+                });
+                if (item.initialState) {
+                    setModelState(key, item.initialState);
+                }
+            }
+        }
+    }
+
+    if(data.ani && typeof data.ani === 'string' && data.ani.startsWith('http')) {
+        // 视频处理在 loadScene
+    } else if (data.ani && !data.ani.pageContent) {
+        camera.position.set(0,20,0);
+        let progress=0;
+        (function aniIn(){
+            progress +=0.01;
+            camera.position.lerp(new THREE.Vector3(0,6,10), progress);
+            camera.lookAt(0,60,0);
+            if(progress<1) requestAnimationFrame(aniIn);
+        })();
+    }
+
+    const raycaster = new THREE.Raycaster();
+    window.checkInteraction = function(screenX, screenY) {
+        const mouse = new THREE.Vector2(screenX, screenY);
+        raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(scene.children, true);
+        
+        if(intersects.length>0) {
+            let foundObj = intersects[0].object, itemData = null;
+            while(foundObj) { 
+                if(objectMap.has(foundObj)) { 
+                    itemData=objectMap.get(foundObj); 
+                    break; 
+                } 
+                foundObj=foundObj.parent; 
+            }
+            if(itemData && itemData.dialogue_) { 
+                startDialogue(itemData, foundObj.name);
+                cu = itemData;
+                return true; 
+            }
+        }
+        return false;
+    };
+}
+
+// ===================== 对话系统核心逻辑 =====================
+function initDialogueSystem() {
+    window.startDialogue = function(itemData, objectKey) {
+        if(document.pointerLockElement) document.exitPointerLock();
+        currentDialogueData = itemData.dialogue_; 
+        currentInteractable = itemData; 
+        window.currentInteractableKey = objectKey; 
+        isPopupOpen = true;
+        titleEl.innerText = itemData.name || "交互";
+        showNode("root");
+        overlayEl.style.display = 'block'; 
+        popupEl.style.display = 'flex';
+    };
+
+    function showNode(nodeId) {
+        currentNodeId = nodeId;
+        const node = currentDialogueData[nodeId];
+        if(!node) { 
+            console.error("对话节点不存在:", nodeId); 
+            closePopup(); 
+            return; 
+        }
+        textEl.innerText = node.text;
+        optionsContainer.innerHTML = ''; 
+        inputArea.style.display = 'none'; 
+        userInputEl.value = '';
+
+        if(node.showInput) { 
+            inputArea.style.display = 'flex';
+            userInputEl.focus(); 
+            return; 
+        }
+        if(node.closeOnEnd) {
+            const btn = document.createElement('button');
+            btn.className = 'dialogue-btn'; 
+            btn.innerText = "好的"; 
+            btn.onclick = closePopup;
+            optionsContainer.appendChild(btn); 
+            return;
+        }
+        if(node.options && node.options.length>0) {
+            node.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'dialogue-btn'; 
+                btn.innerText = `${i+1}. ${opt.label}`;
+                btn.onclick = () => {
+                    if (opt.setState && window.currentInteractableKey) {
+                        setModelState(window.currentInteractableKey, opt.setState);
+                    }
+                    if (opt.goTo) {
+                        showNode(opt.goTo);
+                    }
+                };
+                optionsContainer.appendChild(btn);
+            });
+        } else {
+            const btn = document.createElement('button');
+            btn.className = 'dialogue-btn'; 
+            btn.innerText = "结束对话"; 
+            btn.onclick = closePopup;
+            optionsContainer.appendChild(btn);
+        }
+    }
+
+    window.handleUserInput = async function() {
+        const text = userInputEl.value.trim();
+        if(text === '') return;
+
+        textEl.innerText = "正在思考...";
+        inputArea.style.display = 'none';
+        optionsContainer.innerHTML = '';
+
+        try {
+            const res = await fetch(add_api, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ a0:cu["text_"],a1: text })
+            });
+
+            if (!res.ok) throw new Error('Network response was not ok');
+            
+            const data = await res.json();
+            textEl.innerText = data.reply;
+
+        } catch (error) {
+            console.error("API调用失败:", error);
+            textEl.innerText = `抱歉，连接服务器失败 (${error.message})。请确保后端服务已启动。`;
+        }
+
+        const btn = document.createElement('button');
+        btn.className = 'dialogue-btn'; 
+        btn.innerText = "继续对话"; 
+        btn.onclick = () => {
+            showNode("root");
+        };
+        optionsContainer.appendChild(btn);
+    };
+
+    userInputEl.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            if (window.getComputedStyle(inputArea).display !== 'none') {
+                window.handleUserInput();
+            }
+        }
+    });
+
+    window.closePopup = function() {
+        overlayEl.style.display = 'none'; 
+        popupEl.style.display = 'none';
+        isPopupOpen = false; 
+        currentDialogueData = null; 
+        currentNodeId = null;
+        window.currentInteractableKey = null;
+    };
+    overlayEl.addEventListener('click', closePopup);
+}
+
+// ===================== 场景选择与切换系统 =====================
+function initSceneManagement() {
+    const sceneSelector = document.getElementById('scene-selector');
+    const sceneButtonsContainer = document.getElementById('scene-buttons');
+    const canvasContainer = document.getElementById('canvas-container');
+    const lockTipEl = document.getElementById('lock-tip');
+    const tooltipEl = document.getElementById('scene-tooltip');
+
+    function generateSceneButtons() {
+        sceneButtonsContainer.innerHTML = '';
+        const sceneKeys = Object.keys(book);
+        if(sceneKeys.length === 0) {
+            sceneButtonsContainer.innerHTML = '<div style="font-size:24px; color:white;">暂无场景配置，请检查book.js</div>';
+            return;
+        }
+
+        const centerX = window.innerWidth / 2;
+        const startY = window.innerHeight * 0.3; 
+        const layerGap = 80; 
+        const btnGap = 90; 
+        const MAX_OFFSET = 100;
+        const MIN_OFFSET_FACTOR = 0.2;
+        
+        let currentLayer = 1;
+        let btnIndex = 0;
+
+        while (btnIndex < sceneKeys.length) {
+            const buttonsInLayer = currentLayer;
+            const actualButtons = Math.min(buttonsInLayer, sceneKeys.length - btnIndex);
+            const layerY = startY + (currentLayer - 1) * layerGap;
+            const startX = centerX - ((actualButtons - 1) * btnGap) / 2;
+
+            for (let i = 0; i < actualButtons; i++) {
+                const key = sceneKeys[btnIndex];
+                const btn = document.createElement('button');
+                btn.className = 'scene-btn';
+                btn.dataset.sceneKey = key;
+                btn.dataset.sceneName = book[key].name_;
+                btn.setAttribute('aria-label', book[key].name_ || `场景${key}`);
+
+                // 注入锥形星芒 SVG
+                btn.innerHTML = `
+                <svg width="100%" height="100%" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                <filter id="glow-${key}" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="2" result="blur"/>
+                <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+                </filter>
+                </defs>
+                <circle class="btn-center" cx="30" cy="30" r="6" stroke="var(--main-color)" stroke-width="1.5" fill="none" filter="url(#glow-${key})"/>
+                <g class="btn-rays" fill="var(--main-color)" filter="url(#glow-${key})">
+                    <path d="M30 30 L30 5 L32 30 Z"/>
+                    <path d="M30 30 L52 14 L30 32 Z"/>
+                    <path d="M30 30 L55 30 L30 32 Z"/>
+                    <path d="M30 30 L52 46 L30 32 Z"/>
+                    <path d="M30 30 L30 55 L28 30 Z"/>
+                    <path d="M30 30 L8 46 L30 28 Z"/>
+                    <path d="M30 30 L5 30 L30 28 Z"/>
+                    <path d="M30 30 L8 14 L30 28 Z"/>
+                </g>
+                </svg>
+                `;
+
+                const maxLayersForOffset = 4;
+                const normPos = Math.min((currentLayer - 1) / (maxLayersForOffset - 1), 1);
+                const offsetFactor = MIN_OFFSET_FACTOR + (1 - MIN_OFFSET_FACTOR) * Math.pow(normPos, 1.5);
+                const randomOffsetX = (Math.random() - 0.5) * 2 * MAX_OFFSET * offsetFactor;
+
+                const baseBtnX = startX + i * btnGap;
+                const btnX = baseBtnX + randomOffsetX;
+                const btnY = layerY;
+                
+                btn.style.left = `${btnX - 30}px`;
+                btn.style.top = `${btnY - 30}px`;
+
+                // 鼠标事件
+                btn.addEventListener('mouseenter', (e) => {
+                    tooltipEl.textContent = book[key].name_ || `场景${key}`;
+                    tooltipEl.style.left = `${e.clientX - tooltipEl.offsetWidth / 2}px`;
+                    tooltipEl.style.top = `${e.clientY - 70}px`;
+                    tooltipEl.classList.add('show');
+                    
+                    // GSAP 动画
+                    const c = btn.querySelector('.btn-center');
+                    const r = btn.querySelectorAll('.btn-rays path');
+                    if(window.gsap) {
+                        gsap.to(c, {stroke:'var(--hover-color)', attr:{r:7}, duration:0.3, ease:'power2.out'});
+                        gsap.to(r, {fill:'var(--hover-color)', duration:0.3, stagger:0.05, ease:'power2.out'});
+                    }
+                });
+
+                btn.addEventListener('mouseleave', () => {
+                    tooltipEl.classList.remove('show');
+                    
+                    // GSAP 动画
+                    const c = btn.querySelector('.btn-center');
+                    const r = btn.querySelectorAll('.btn-rays path');
+                    if(window.gsap) {
+                        gsap.to(c, {stroke:'var(--main-color)', attr:{r:6}, duration:0.3, ease:'power2.in'});
+                        gsap.to(r, {fill:'var(--main-color)', duration:0.3, stagger:0.03, ease:'power2.in'});
+                    }
+                });
+
+                btn.addEventListener('click', () => loadScene(key));
+                sceneButtonsContainer.appendChild(btn);
+
+                // 星芒呼吸动画
+                const r = btn.querySelectorAll('.btn-rays path');
+                if(window.gsap) {
+                    gsap.to(r, {opacity:0.7, duration:1.5, repeat:-1, yoyo:true, stagger:0.1, ease:'sine.inOut'});
+                }
+
+                btnIndex++;
+                if (btnIndex >= sceneKeys.length) break;
+            }
+
+            currentLayer++;
+        }
+    }
+        
+
+    function loadScene(sceneKey) {
+            const sceneData = book[sceneKey];
+            if(!sceneData) {
+                alert('场景不存在！');
+                return;
+            }
+
+            if (sceneData.ani && sceneData.ani.pageContent) {
+        sceneSelector.style.display = 'none';
+        
+        // --- 先在后台加载场景，不显示 ---
+        init3DScene(sceneKey, false); 
+        
+        // --- 书法结束后，只做“显示画面”的操作 ---
+        window.currentOnEnd = () => {
+            canvasContainer.style.display = 'block';
+            lockTipEl.style.display = 'block';
+        };
+        
+        setTimeout(() => {
+            const container = document.querySelector('.calligraphy-container');
+            if(!container) {
+                // 兜底：如果书法容器没找到，直接显示场景
+                canvasContainer.style.display = 'block';
+                lockTipEl.style.display = 'block';
+                return;
+            }
+            startCalligraphyTypewriter(sceneData.ani, window.currentOnEnd);
+        }, 300);
+        return;
+        }
+
+        if (sceneData && typeof sceneData.ani === 'string' && sceneData.ani.startsWith('http')) {
+            sceneSelector.style.display = 'none';
+            playVideo(sceneData.ani, () => {
+                init3DScene(sceneKey);
+            });
+            return;
+        }
+
+        init3DScene(sceneKey);
+    }
+
+    function init3DScene(sceneKey, showImmediately = true) {
+        modelStates.clear();
+        if (renderer) {
+            renderer.dispose();
+            if (renderer.domElement && canvasContainer.contains(renderer.domElement)) {
+                canvasContainer.removeChild(renderer.domElement);
+            }
+        }
+        if (animateFrameId) cancelAnimationFrame(animateFrameId);
+        document.removeEventListener('mousedown', window.handleRightClick);
+        document.removeEventListener('keydown', window.handleEnterKey);
+        window.checkInteraction = null;
+        isMouseLocked = false;
+        isPopupOpen = false;
+        
+        renderer = new THREE.WebGLRenderer({antialias: true});
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        canvasContainer.appendChild(renderer.domElement);
+        
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+        camera.position.set(0, 30, 0);
+        
+        scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        dirLight.position.set(10, 20, 10);
+        scene.add(dirLight);
+        
+        initFirstPersonController(camera, renderer, GLOBAL_CONFIG);
+        renderSceneFromBook(sceneKey, scene, camera, renderer, book);
+        
+        setupInteractionListeners(renderer);
+        overlayEl.addEventListener('click', closePopup);
+        
+        if (animateFrameId) cancelAnimationFrame(animateFrameId);
+        (function animate() {
+            animateFrameId = requestAnimationFrame(animate);
+            
+            const delta = clock.getDelta();
+            modelStates.forEach((state) => {
+                if (state.mixer) {
+                    state.mixer.update(delta);
+                }
+                if (state.isMoving) {
+                    const moveStep = state.speed * delta; // 计算本帧移动步长
+                    state.moveProgress += moveStep;       // 累加进度
+                    
+                    if (state.moveProgress >= state.moveDistance) {
+                        // 到达目标：直接设为终点并停止移动
+                        state.mesh.position.copy(state.targetPosition);
+                        state.isMoving = false;
+                    } else {
+                        // 未到达：按方向和步长移动
+                        state.mesh.position.addScaledVector(state.moveDirection, moveStep);
+                    }
+                    // 可选：让模型朝向移动方向（避免距离过近抖动）
+                    if (state.moveDistance > 0.001) {
+                        state.mesh.lookAt(state.targetPosition);}
+            }
+        });
+
+            renderer.render(scene, camera);
+        })();
+
+        sceneSelector.style.display = 'none';
+        // 仅在需要时显示画面，否则仅在后台加载
+        if (showImmediately) {
+            canvasContainer.style.display = 'block';
+            lockTipEl.style.display = 'block';
+        }
+    }
+
+    function setupInteractionListeners(renderer) {
+        document.removeEventListener('mousedown', window.handleRightClick);
+        document.removeEventListener('keydown', window.handleEnterKey);
+        document.addEventListener('mousedown', window.handleRightClick);
+        document.addEventListener('keydown', window.handleEnterKey);
+    }
+
+    generateSceneButtons();
+
+    window.addEventListener('resize', () => {
+        if (renderer && camera) {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        if (sceneSelector.style.display !== 'none') {
+            generateSceneButtons();
+        }
+    });
+}
+
+// ===================== 应用启动入口 =====================
+function initApp() {
+    initVideoElements();
+    initCalligraphyElements();
+    setupCoreInteractionHandlers();
+    initDialogueSystem();
+    initSceneManagement();
+    // 禁用右键菜单，防止冲突
+    document.addEventListener('contextmenu', (e) => e.preventDefault());
+}
+
+// 启动应用
+initApp();
+</script>
+</body>
+</html>
