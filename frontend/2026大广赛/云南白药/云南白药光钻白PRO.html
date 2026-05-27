@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>云南白药光钻白PRO牙膏 — 护口有方，钻白闪耀</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="../../anim-libs/gsap.min.js"></script>
+<style>
+/* ===== Reset & Base ===== */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:16px}
+body{
+  font-family:'Noto Sans SC','Microsoft YaHei','PingFang SC',sans-serif;
+  background:#f7f5f0;color:#1a1a1a;overflow-x:hidden;
+  -webkit-font-smoothing:antialiased
+}
+
+/* ===== Variables ===== */
+:root{
+  --navy:#0f1b2d;--navy-light:#1a3050;--navy-mid:#2a4060;
+  --gold:#c9a96e;--gold-light:#e8d5a8;--gold-dark:#a8884a;
+  --cream:#f7f5f0;--cream-dark:#efe9e0;--white:#fff;
+  --text:#1a1a1a;--text-light:#6b6b6b;--tea:#7a9e7a;--tea-light:#a8c8a8;
+  --section-gap:6rem;--container:1200px
+}
+
+/* ===== Typography ===== */
+h1,h2,h3,h4,.display-font{font-family:'Noto Serif SC','SimSun','Songti SC',serif}
+.section-label{
+  font-size:.75rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);font-weight:500;margin-bottom:1rem
+}
+
+/* ===== Scroll Progress Bar ===== */
+#scroll-progress{position:fixed;top:0;left:0;width:0;height:2px;z-index:99999;background:linear-gradient(90deg,var(--gold),var(--gold-light),var(--gold));transition:width .1s linear;box-shadow:0 0 8px rgba(201,169,110,.4)}
+
+/* ===== Scroll Reveal ===== */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .8s cubic-bezier(.25,.46,.45,.94),transform .8s cubic-bezier(.25,.46,.45,.94)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+.reveal-delay-4{transition-delay:.4s}
+
+/* ===== Magnetic Button ===== */
+.btn-magnetic{position:relative;display:inline-flex;align-items:center;justify-content:center;overflow:hidden}
+.btn-magnetic .btn-bg{position:absolute;inset:0;pointer-events:none;transition:transform .4s cubic-bezier(.16,1,.3,1)}
+
+/* ===== Button Ripple ===== */
+.ripple-btn{position:relative;overflow:hidden}
+.ripple-btn .ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.35);transform:scale(0);animation:rippleAnim .6s ease-out;pointer-events:none}
+@keyframes rippleAnim{to{transform:scale(4);opacity:0}}
+
+/* ===== CTA Pulse Glow ===== */
+.cta-glow{position:relative}
+.cta-glow::before{content:'';position:absolute;inset:-4px;border-radius:4px;background:linear-gradient(135deg,var(--gold-light),var(--gold),var(--gold-dark));opacity:0;z-index:-1;transition:opacity .4s ease;animation:glowPulse 2.5s ease-in-out infinite}
+.cta-glow:hover::before{opacity:.5}
+@keyframes glowPulse{0%,100%{opacity:0}50%{opacity:.4}}
+
+/* ===== Before/After Comparator ===== */
+.comparison-wrap{position:relative;max-width:500px;margin:2rem auto;border-radius:8px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.08);cursor:ew-resize;user-select:none;-webkit-user-select:none}
+.comparison-img{display:block;width:100%;height:auto}
+.comparison-overlay{position:absolute;top:0;left:0;height:100%;overflow:hidden;width:50%}
+.comparison-overlay img{display:block;height:100%;width:auto;max-width:none}
+.comparison-handle{position:absolute;top:0;bottom:0;left:50%;width:3px;background:var(--white);transform:translateX(-50%);z-index:3;box-shadow:0 0 12px rgba(0,0,0,.2)}
+.comparison-handle::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:36px;height:36px;border-radius:50%;background:var(--white);box-shadow:0 2px 12px rgba(0,0,0,.15)}
+.comparison-handle::after{content:'↔';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:16px;color:var(--navy);z-index:1;line-height:1}
+.comparison-label{position:absolute;bottom:16px;font-size:.7rem;letter-spacing:.1em;color:var(--white);text-shadow:0 1px 4px rgba(0,0,0,.3);z-index:2;pointer-events:none}
+.comparison-label.before{left:16px}
+.comparison-label.after{right:16px}
+
+/* ===== Counter Digit Animation ===== */
+.counter-num{display:inline-block;font-variant-numeric:tabular-nums}
+.counter-digit{display:inline-block;position:relative}
+.counter-digit .digit-wrap{display:inline-block;transition:transform .6s cubic-bezier(.16,1,.3,1)}
+
+/* ===== Scent Particle ===== */
+.scent-particle{position:absolute;pointer-events:none;border-radius:50%;background:radial-gradient(circle,var(--gold-light),transparent);opacity:0;animation:scentFloat 6s ease-out infinite}
+@keyframes scentFloat{0%{transform:translateY(0) scale(0);opacity:0}20%{opacity:.4}80%{opacity:.2}100%{transform:translateY(-120px) scale(1);opacity:0}}
+
+/* ===== Timeline ===== */
+.timeline-track{position:relative;padding:3rem 0;margin:2rem 0}
+.timeline-track::before{content:'';position:absolute;left:0;right:0;top:50%;height:2px;background:linear-gradient(90deg,transparent,var(--gold-light),var(--gold),var(--gold-light),transparent);transform:scaleX(0);transform-origin:left;transition:none}
+.timeline-nodes{display:flex;justify-content:space-between;position:relative;gap:1rem}
+.timeline-node{flex:1;text-align:center;position:relative;opacity:0;transform:translateY(20px)}
+.timeline-dot{width:16px;height:16px;border-radius:50%;background:var(--cream-dark);border:2px solid var(--gold);margin:0 auto 1rem;position:relative;z-index:2;transition:all .4s ease}
+.timeline-dot.active{background:var(--gold);box-shadow:0 0 20px rgba(201,169,110,.4);transform:scale(1.2)}
+.timeline-year{font-family:'Noto Serif SC',serif;font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:.2rem}
+.timeline-desc{font-size:.75rem;color:var(--text-light);line-height:1.5;max-width:180px;margin:0 auto}
+
+/* ===== Enhanced Card Micro ===== */
+.youth-card .scene-media{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:var(--cream);border-radius:8px;opacity:0;transition:opacity .4s ease;font-size:3rem;pointer-events:none}
+.youth-card:hover .scene-media{opacity:1}
+.youth-card .scene-media img{width:100%;height:100%;object-fit:cover;display:block}
+.scent-layers{position:relative}
+#scentParticles{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden;z-index:0}
+.scent-layer .scent-bg{position:absolute;inset:0;border-radius:4px;overflow:hidden;opacity:0;transition:opacity .6s ease;z-index:0}
+.scent-layer:hover .scent-bg{opacity:.18}
+.scent-layer .scent-bg img{width:100%;height:100%;object-fit:cover}
+.scent-layer>*{position:relative;z-index:1}
+.youth-card .scene-content{position:relative;z-index:2;transition:transform .4s ease}
+.youth-card:hover .scene-content{transform:translateY(-8px)}
+
+/* ===== Floating Sparkles ===== */
+.sparkle{position:fixed;pointer-events:none;z-index:99998}
+.sparkle svg{width:100%;height:100%}
+
+/* ===== Magnetic CTA ===== */
+.magnetic-wrap{display:inline-flex;position:relative}
+
+/* ===== Particles ===== */
+#particle-canvas{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:9999;mix-blend-mode:screen}
+
+/* ===== Navigation ===== */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  padding:1.2rem 2rem;display:flex;justify-content:space-between;align-items:center;
+  transition:background .4s ease,padding .4s ease,box-shadow .4s ease
+}
+nav.scrolled{background:rgba(15,27,45,.92);backdrop-filter:blur(20px) saturate(1.2);padding:.8rem 2rem;box-shadow:0 1px 30px rgba(0,0,0,.15)}
+nav .logo{height:32px;opacity:.9;transition:opacity .3s}
+nav .logo:hover{opacity:1}
+nav .nav-links{display:flex;gap:2rem;list-style:none}
+nav .nav-links a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.82rem;letter-spacing:.05em;transition:color .3s;font-weight:400}
+nav .nav-links a:hover{color:var(--gold)}
+
+/* Hamburger */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;padding:4px;z-index:1001}
+.hamburger span{display:block;width:24px;height:2px;background:#c9a96e;transition:all .3s ease;transform-origin:center}
+.hamburger.active span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+
+/* Mobile nav overlay */
+.nav-overlay{
+  display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:999;
+  background:rgba(15,27,45,.97);backdrop-filter:blur(10px);
+  flex-direction:column;justify-content:center;align-items:center;gap:2.5rem
+}
+.nav-overlay.open{display:flex}
+.nav-overlay a{color:rgba(255,255,255,.85);text-decoration:none;font-size:1.3rem;letter-spacing:.15em;transition:color .3s;font-family:'Noto Serif SC',serif}
+.nav-overlay a:hover{color:var(--gold)}
+
+/* ===== Hero ===== */
+.hero{
+  position:relative;min-height:100vh;
+  background:linear-gradient(160deg,#0a1428 0%,#162240 35%,#1a3050 60%,#0f1b2d 100%);
+  display:flex;align-items:center;overflow:hidden
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 20% 80%,rgba(201,169,110,.08) 0%,transparent 60%),
+             radial-gradient(ellipse at 80% 20%,rgba(122,158,122,.06) 0%,transparent 50%);
+  pointer-events:none
+}
+.hero .diamond-grid{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(201,169,110,.03) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(201,169,110,.03) 1px,transparent 1px);
+  background-size:60px 60px
+}
+.hero .hero-content{
+  position:relative;z-index:2;max-width:var(--container);margin:0 auto;
+  padding:0 3rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;width:100%
+}
+.hero-text .brand-tag{
+  display:inline-block;font-size:.7rem;letter-spacing:.4em;color:var(--gold);
+  border:1px solid rgba(201,169,110,.3);padding:.4rem 1.2rem;border-radius:2px;margin-bottom:1.5rem;font-weight:400
+}
+.hero-text .slogan-tag{
+  display:inline-block;font-size:.75rem;letter-spacing:.15em;
+  color:rgba(255,255,255,.4);margin-bottom:1rem;font-weight:300;font-style:italic
+}
+.hero-text .slogan-tag strong{color:var(--gold-light);font-weight:600}
+.hero-text h1{
+  font-size:clamp(2.8rem,5vw,4.5rem);font-weight:900;color:var(--white);
+  line-height:1.2;letter-spacing:.06em
+}
+.hero-text h1 .accent{
+  background:linear-gradient(135deg,var(--gold-light),var(--gold),var(--gold-dark));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text
+}
+.hero-text .subtitle{
+  font-size:1.2rem;color:rgba(255,255,255,.6);line-height:1.8;margin:1.5rem 0 2rem;font-weight:300;letter-spacing:.02em
+}
+.hero-text .hero-cta{
+  display:inline-flex;align-items:center;gap:.8rem;
+  padding:.9rem 2.4rem;background:linear-gradient(135deg,var(--gold),var(--gold-dark));
+  color:var(--white);text-decoration:none;font-size:.9rem;letter-spacing:.1em;border-radius:2px;
+  transition:all .4s ease;font-weight:500
+}
+.hero-text .hero-cta:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(201,169,110,.3)}
+.hero-text .hero-cta svg{width:18px;height:18px}
+
+.hero-visual{position:relative;display:flex;justify-content:center;align-items:center}
+.hero-visual .product-glow{
+  position:absolute;width:400px;height:400px;
+  background:radial-gradient(circle,rgba(201,169,110,.15),transparent 70%);
+  border-radius:50%;animation:pulseGlow 4s ease-in-out infinite
+}
+@keyframes pulseGlow{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.1);opacity:1}}
+.hero-visual .product-frame{
+  position:relative;width:380px;height:520px;overflow:hidden;border-radius:8px;
+  box-shadow:0 30px 80px rgba(0,0,0,.4),0 0 0 1px rgba(201,169,110,.15)
+}
+.hero-visual .product-frame img{width:100%;height:100%;object-fit:cover}
+.hero-scroll-indicator{
+  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);z-index:2;
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;color:rgba(255,255,255,.3);font-size:.65rem;letter-spacing:.2em
+}
+.hero-scroll-indicator .scroll-line{
+  width:1px;height:40px;background:linear-gradient(to bottom,rgba(255,255,255,.3),transparent);
+  animation:scrollPulse 2s ease-in-out infinite
+}
+@keyframes scrollPulse{0%,100%{opacity:.3;transform:scaleY(1)}50%{opacity:1;transform:scaleY(1.2)}}
+
+/* ===== Section Shared ===== */
+section{padding:var(--section-gap) 2rem}
+.section-inner{max-width:var(--container);margin:0 auto;position:relative}
+
+/* ===== Brand Heritage ===== */
+.brand-heritage{background:var(--cream);padding:8rem 2rem;position:relative}
+.brand-heritage::before{
+  content:'1902';position:absolute;right:5%;bottom:10%;
+  font-size:clamp(10rem,20vw,18rem);font-family:'Noto Serif SC',serif;font-weight:900;
+  color:rgba(15,27,45,.03);line-height:1;pointer-events:none
+}
+.heritage-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.heritage-text .year{font-size:7rem;font-weight:900;color:var(--navy);line-height:.9;margin-bottom:.5rem}
+.heritage-text .year-label{font-size:.8rem;letter-spacing:.3em;color:var(--gold);margin-bottom:2rem}
+.heritage-text p{font-size:1.05rem;line-height:2;color:var(--text-light)}
+.heritage-text .highlight{color:var(--navy);font-weight:700}
+.heritage-stats{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+.heritage-stat{text-align:center;padding:2.5rem 1.5rem;background:var(--white);box-shadow:0 4px 30px rgba(0,0,0,.04)}
+.heritage-stat .number{font-size:3rem;font-weight:900;color:var(--navy);font-family:'Noto Serif SC',serif;line-height:1}
+.heritage-stat .number .gold{color:var(--gold)}
+.heritage-stat .label{font-size:.8rem;color:var(--text-light);margin-top:.5rem;letter-spacing:.05em}
+
+/* ===== Core Benefits ===== */
+.benefit{padding:8rem 2rem;position:relative}
+.benefit:nth-child(odd){background:var(--white)}
+.benefit:nth-child(even){background:var(--cream)}
+.benefit-inner{
+  max-width:var(--container);margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center
+}
+.benefit-inner.reverse{grid-template-areas:"content visual"}
+.benefit-inner.reverse .benefit-visual{grid-area:visual}
+.benefit-inner.reverse .benefit-content{grid-area:content}
+.benefit-visual{position:relative;border-radius:8px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.06)}
+.benefit-visual img{width:100%;height:100%;object-fit:cover;display:block}
+.benefit-visual .visual-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(15,27,45,.2),transparent);pointer-events:none
+}
+.benefit-visual.aspect-3-4{aspect-ratio:3/4}
+.benefit-visual.aspect-4-3{aspect-ratio:4/3}
+.benefit-visual.aspect-square{aspect-ratio:1/1}
+.benefit-content .benefit-number{font-size:.75rem;letter-spacing:.3em;color:var(--gold);margin-bottom:.5rem;font-weight:500}
+.benefit-content h2{font-size:clamp(2rem,3.5vw,2.8rem);font-weight:700;color:var(--navy);line-height:1.3;margin-bottom:1.5rem;letter-spacing:.03em}
+.benefit-content p{font-size:1rem;line-height:2;color:var(--text-light);margin-bottom:1.2rem}
+.benefit-content .pillar-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem;margin-top:2rem}
+.pillar-item{text-align:center;padding:1.5rem .8rem;background:var(--cream);border-radius:4px;transition:all .3s ease}
+.pillar-item:hover{transform:translateY(-3px);box-shadow:0 8px 25px rgba(0,0,0,.06)}
+.pillar-item .icon{font-size:1.8rem;margin-bottom:.6rem;display:block}
+.pillar-item .title{font-size:.85rem;font-weight:700;color:var(--navy);margin-bottom:.3rem}
+.pillar-item .desc{font-size:.72rem;color:var(--text-light);line-height:1.5}
+
+/* ===== 3抗 ===== */
+.anti-three{
+  background:linear-gradient(160deg,#0a1428,#1a3050);color:var(--white);
+  padding:8rem 2rem;position:relative;overflow:hidden
+}
+.anti-three::before{
+  content:'';position:absolute;top:-50%;right:-20%;width:800px;height:800px;
+  background:radial-gradient(circle,rgba(201,169,110,.06),transparent 70%);pointer-events:none
+}
+.anti-three .section-label{color:var(--gold-light)}
+.anti-three h2{font-size:clamp(2rem,3.5vw,2.8rem);font-weight:700;text-align:center;margin-bottom:1rem}
+.anti-three .subtitle{text-align:center;color:rgba(255,255,255,.5);font-size:1rem;margin-bottom:4rem;font-weight:300}
+.anti-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;max-width:var(--container);margin:0 auto}
+.anti-card{
+  padding:3rem 2rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);
+  border-radius:4px;text-align:center;transition:all .4s ease
+}
+.anti-card:hover{background:rgba(255,255,255,.08);border-color:rgba(201,169,110,.2);transform:translateY(-5px)}
+.anti-card .emoji-icon{font-size:2.5rem;margin-bottom:1rem;display:block}
+.anti-card h3{font-size:1.2rem;color:var(--gold);margin-bottom:.8rem;font-weight:600}
+.anti-card p{font-size:.88rem;color:rgba(255,255,255,.55);line-height:1.8}
+.anti-result{
+  text-align:center;margin-top:4rem;padding:3rem;
+  background:rgba(201,169,110,.06);border:1px solid rgba(201,169,110,.15);
+  border-radius:4px;max-width:700px;margin-left:auto;margin-right:auto
+}
+.anti-result .big-number{
+  font-size:4.5rem;font-weight:900;
+  background:linear-gradient(135deg,var(--gold-light),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  font-family:'Noto Serif SC',serif;line-height:1
+}
+.anti-result .big-number-sub{font-size:1.2rem;color:rgba(255,255,255,.6);margin-top:.3rem}
+.anti-result p{color:rgba(255,255,255,.5);font-size:.85rem;margin-top:.8rem}
+
+/* ===== 敢吃敢笑敢闪耀 (Youth Lifestyle) ===== */
+.youth-section{
+  background:linear-gradient(180deg,var(--white),#f0ece4);
+  padding:8rem 2rem;text-align:center;position:relative;overflow:hidden
+}
+.youth-section h2{font-size:clamp(2rem,3.5vw,2.8rem);color:var(--navy);font-weight:700;margin-bottom:.5rem}
+.youth-section .youth-tagline{
+  font-size:clamp(1.5rem,3vw,2.4rem);font-weight:900;
+  background:linear-gradient(135deg,var(--gold-light),var(--gold),var(--gold-dark));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  font-family:'Noto Serif SC',serif;margin-bottom:1rem;letter-spacing:.08em
+}
+.youth-section .youth-desc{color:var(--text-light);font-size:1rem;line-height:2;max-width:600px;margin:0 auto 4rem}
+.youth-scenes{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;max-width:var(--container);margin:0 auto}
+.youth-card{
+  padding:2.5rem 1.5rem;background:var(--cream);border-radius:8px;
+  transition:all .4s ease;position:relative;overflow:hidden
+}
+.youth-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--gold-light),var(--gold),var(--gold-dark));
+  transform:scaleX(0);transform-origin:left;transition:transform .4s ease
+}
+.youth-card:hover::before{transform:scaleX(1)}
+.youth-card:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(0,0,0,.07)}
+.youth-card .scene-emoji{font-size:2.5rem;display:block;margin-bottom:1rem}
+.youth-card h3{font-size:1rem;color:var(--navy);font-weight:700;margin-bottom:.4rem}
+.youth-card p{font-size:.82rem;color:var(--text-light);line-height:1.7}
+
+/* ===== 美白必伤牙 Mythbusting ===== */
+.mythbust{
+  background:var(--cream);padding:6rem 2rem
+}
+.mythbust-inner{max-width:var(--container);margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.mythbust-visual{text-align:center;position:relative}
+.mythbust-visual .myth-icon{font-size:4rem;display:block;margin-bottom:1rem}
+.mythbust-visual .myth-label{
+  display:inline-block;padding:.4rem 2rem;border-radius:4px;
+  font-size:.85rem;letter-spacing:.1em;font-weight:700
+}
+.mythbust-visual .myth-label.myth{background:#f0e0d8;color:#b06050}
+.mythbust-visual .myth-label.fact{background:#d0e0d0;color:#4a7a4a}
+.mythbust-content h2{font-size:clamp(1.8rem,3vw,2.4rem);color:var(--navy);font-weight:700;line-height:1.3;margin-bottom:1.5rem}
+.mythbust-content p{font-size:1rem;line-height:2;color:var(--text-light);margin-bottom:1rem}
+.mythbust-content .compare-flow{display:flex;align-items:center;gap:1rem;margin-top:2rem;padding:1.5rem;background:var(--white);border-radius:8px}
+.compare-flow .step{text-align:center;flex:1}
+.compare-flow .step .step-icon{font-size:2rem;display:block;margin-bottom:.3rem}
+.compare-flow .step .step-label{font-size:.78rem;color:var(--text-light)}
+.compare-flow .arrow{color:var(--gold);font-size:1.5rem}
+
+/* ===== Social Proof ===== */
+.social-proof{background:var(--white);padding:5rem 2rem;text-align:center}
+.social-proof .stars{font-size:1.8rem;letter-spacing:.2em;margin-bottom:.5rem;display:block}
+.social-proof .rating-text{font-size:1.1rem;color:var(--navy);font-weight:500;margin-bottom:.3rem}
+.social-proof .rating-sub{font-size:.85rem;color:var(--text-light)}
+.social-proof .testimonial-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem;max-width:var(--container);margin:2rem auto 0}
+.testimonial-card{
+  padding:2rem;background:var(--cream);border-radius:4px;text-align:left;position:relative
+}
+.testimonial-card::before{content:'"';position:absolute;top:.5rem;left:1rem;font-size:3rem;color:var(--gold);opacity:.3;font-family:serif;line-height:1}
+.testimonial-card p{font-size:.88rem;color:var(--text-light);line-height:1.8;font-style:italic}
+.testimonial-card .author{font-size:.78rem;color:var(--gold);margin-top:1rem;font-style:normal;font-weight:500}
+
+/* ===== Scent Section ===== */
+.scent{background:linear-gradient(180deg,var(--cream) 0%,#f0ece4 100%);padding:8rem 2rem}
+.scent-inner{max-width:var(--container);margin:0 auto;text-align:center}
+.scent h2{font-size:clamp(2rem,3.5vw,2.8rem);color:var(--navy);font-weight:700;margin-bottom:1rem}
+.scent .scent-desc{color:var(--text-light);font-size:1rem;line-height:2;max-width:600px;margin:0 auto 4rem}
+.scent-layers{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+.scent-layer{
+  padding:3rem 2rem;background:var(--white);border-radius:4px;position:relative;
+  box-shadow:0 4px 30px rgba(0,0,0,.03);transition:all .3s ease
+}
+.scent-layer:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.06)}
+.scent-layer .layer-label{
+  display:inline-block;font-size:.65rem;letter-spacing:.3em;
+  padding:.3rem 1rem;border-radius:2px;margin-bottom:1.2rem
+}
+.scent-layer .layer-label.top{background:#e8e0d0;color:#8a7a5a}
+.scent-layer .layer-label.mid{background:#dce4d8;color:#5a7a5a}
+.scent-layer .layer-label.base{background:#d8d4d0;color:#6a5a4a}
+.scent-layer h3{font-size:1.3rem;color:var(--navy);margin-bottom:.5rem;font-weight:600}
+.scent-layer .notes{font-size:.9rem;color:var(--text-light);line-height:1.8}
+
+/* ===== Product Specs + Price ===== */
+.specs{background:var(--white);padding:6rem 2rem}
+.specs-inner{max-width:var(--container);margin:0 auto}
+.specs-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border:1px solid #e8e4dc}
+.spec-item{display:flex;padding:1.5rem 2rem;border-bottom:1px solid #f0ece4;border-right:1px solid #f0ece4}
+.spec-item:nth-child(even){border-right:none}
+.spec-item:nth-last-child(-n+2){border-bottom:none}
+.spec-item .label{flex:0 0 100px;font-size:.8rem;color:#a8884a;letter-spacing:.05em;font-weight:500}
+.spec-item .value{font-size:.9rem;color:var(--text);line-height:1.6;flex:1}
+.price-row{
+  display:flex;align-items:center;justify-content:center;gap:2rem;
+  margin-top:2.5rem;padding:2rem;background:var(--cream);border-radius:4px
+}
+.price-row .price{font-size:2.2rem;font-weight:900;color:var(--navy);font-family:'Noto Serif SC',serif}
+.price-row .price .currency{font-size:1rem;color:var(--text-light)}
+.price-row .price .original{font-size:1rem;color:var(--text-light);text-decoration:line-through;font-weight:400;margin-left:.5rem}
+.price-row .buy-btn{
+  display:inline-flex;align-items:center;gap:.6rem;
+  padding:.9rem 2.4rem;background:var(--navy);color:var(--white);
+  text-decoration:none;font-size:.9rem;letter-spacing:.1em;border-radius:2px;
+  transition:all .4s ease;font-weight:500
+}
+.price-row .buy-btn:hover{background:var(--navy-light);transform:translateY(-2px);box-shadow:0 8px 30px rgba(15,27,45,.2)}
+
+/* ===== Market Leader ===== */
+.market-leader{background:var(--navy);color:var(--white);padding:6rem 2rem;text-align:center}
+.market-leader .big-stat{
+  font-size:clamp(3rem,6vw,5rem);font-weight:900;font-family:'Noto Serif SC',serif;
+  background:linear-gradient(135deg,var(--gold-light),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text
+}
+.market-leader .stat-label{font-size:1.1rem;color:rgba(255,255,255,.5);margin-top:.5rem;font-weight:300}
+.market-leader p{color:rgba(255,255,255,.4);font-size:.85rem;margin-top:1rem;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.8}
+
+/* ===== CTA ===== */
+.cta-section{background:linear-gradient(160deg,var(--cream) 0%,#e8e4dc 100%);padding:8rem 2rem;text-align:center}
+.cta-section h2{font-size:clamp(2rem,4vw,3.2rem);color:var(--navy);font-weight:700;margin-bottom:1rem}
+.cta-section p{color:var(--text-light);max-width:500px;margin:0 auto 2.5rem;line-height:2;font-size:1rem}
+.cta-section .cta-button{
+  display:inline-flex;align-items:center;gap:.8rem;
+  padding:1rem 3rem;background:linear-gradient(135deg,var(--gold),var(--gold-dark));
+  color:var(--white);text-decoration:none;font-size:.9rem;letter-spacing:.1em;border-radius:2px;
+  transition:all .4s ease;font-weight:500;border:none;cursor:pointer
+}
+.cta-section .cta-button:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(201,169,110,.3)}
+
+/* ===== Footer ===== */
+footer{background:#0a1428;color:rgba(255,255,255,.3);padding:3rem 2rem;text-align:center;font-size:.75rem;line-height:2}
+footer .footer-logo{height:24px;opacity:.3;margin-bottom:1rem}
+footer .social-links{display:flex;justify-content:center;gap:2rem;margin:1.5rem 0;flex-wrap:wrap}
+footer .social-links a{color:rgba(255,255,255,.4);text-decoration:none;font-size:.78rem;transition:color .3s;letter-spacing:.02em}
+footer .social-links a:hover{color:var(--gold)}
+footer .hashtags{color:rgba(255,255,255,.25);font-size:.7rem;letter-spacing:.05em;margin-top:1rem}
+
+/* ===== Responsive ===== */
+@media(max-width:900px){
+  .hero .hero-content{grid-template-columns:1fr;text-align:center}
+  .hero-visual{display:none}
+  .heritage-grid{grid-template-columns:1fr;gap:3rem}
+  .benefit-inner{grid-template-columns:1fr;gap:3rem}
+  .benefit-inner.reverse{grid-template-areas:none}
+  .anti-grid{grid-template-columns:1fr}
+  .scent-layers,.youth-scenes,.testimonial-grid,.mythbust-inner{grid-template-columns:1fr}
+  .specs-grid{grid-template-columns:1fr}
+  .spec-item:nth-child(even){border-right:1px solid #f0ece4}
+  .spec-item:nth-last-child(-n+2){border-bottom:1px solid #f0ece4}
+  .spec-item:last-child{border-bottom:none}
+  nav .nav-links{display:none}
+  .hamburger{display:flex}
+  .heritage-stats{grid-template-columns:1fr 1fr}
+  .benefit-content .pillar-grid{grid-template-columns:1fr 1fr}
+  .price-row{flex-direction:column;gap:1rem;text-align:center}
+  .youth-scenes{grid-template-columns:repeat(2,1fr)}
+  .compare-flow{flex-direction:column}
+}
+
+@media(max-width:480px){
+  :root{--section-gap:4rem}
+  .hero-text h1{font-size:2.2rem}
+  .heritage-stat .number{font-size:2.2rem}
+  .anti-result .big-number{font-size:3rem}
+  .benefit-content .pillar-grid,.youth-scenes{grid-template-columns:1fr}
+}
+
+/* ===== Interactive Game: 钻白闯关 ===== */
+.game-section{background:linear-gradient(135deg,var(--navy),var(--navy-light));padding:5rem 2rem;color:var(--white);overflow:hidden;position:relative}
+.game-section::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 50%,rgba(201,169,110,.08),transparent 60%);pointer-events:none}
+.game-inner{max-width:var(--container);margin:0 auto;text-align:center}
+.game-progress{display:flex;justify-content:center;gap:.75rem;margin:2rem 0 3rem}
+.game-step{width:48px;height:48px;border-radius:50%;border:2px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:600;color:rgba(255,255,255,.3);transition:all .4s;position:relative}
+.game-step.active{border-color:var(--gold);color:var(--gold);box-shadow:0 0 20px rgba(201,169,110,.3)}
+.game-step.done{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+.game-step::after{content:'';position:absolute;left:100%;width:.75rem;height:2px;background:rgba(255,255,255,.1)}
+.game-step:last-child::after{display:none}
+.game-panel{display:none;animation:fadeIn .5s ease}
+.game-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.game-card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.75rem;margin:1.5rem 0;max-width:700px;margin-left:auto;margin-right:auto}
+.game-card{padding:1rem 1.2rem;border-radius:12px;cursor:pointer;transition:all .3s;font-size:.85rem;line-height:1.4;text-align:left;user-select:none}
+.game-card.healthy{background:rgba(74,187,128,.15);border:1.5px solid rgba(74,187,128,.3);color:rgba(255,255,255,.85)}
+.game-card.healthy:hover{background:rgba(74,187,128,.25);border-color:#4abb80;transform:translateY(-2px)}
+.game-card.healthy.selected{background:#4abb80;border-color:#4abb80;color:#fff}
+.game-card.unhealthy{background:rgba(255,107,107,.15);border:1.5px solid rgba(255,107,107,.3);color:rgba(255,255,255,.85)}
+.game-card.unhealthy:hover{background:rgba(255,107,107,.25);border-color:#ff6b6b;transform:translateY(-2px)}
+.game-card.unhealthy.selected{background:#ff6b6b;border-color:#ff6b6b;color:#fff}
+.game-card.wrong{animation:shake .4s;border-color:#ff6b6b!important;background:rgba(255,107,107,.3)!important}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+.game-feedback{max-width:600px;margin:1rem auto;padding:1rem 1.5rem;border-radius:12px;font-size:.85rem;line-height:1.6;display:none}
+.game-feedback.show{display:block;animation:fadeIn .3s ease}
+.game-feedback.correct{background:rgba(74,187,128,.15);border:1px solid rgba(74,187,128,.3)}
+.game-feedback.wrong{background:rgba(255,107,107,.15);border:1px solid rgba(255,107,107,.3)}
+/* Level 2: Bubble pop */
+.bubble-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin:2rem 0;max-width:650px;margin-left:auto;margin-right:auto}
+.bubble-myth{position:relative;padding:1rem 1.5rem;border-radius:50px;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);cursor:pointer;transition:all .4s;font-size:.88rem;color:rgba(255,255,255,.85);user-select:none}
+.bubble-myth:hover{background:rgba(201,169,110,.15);border-color:var(--gold);transform:scale(1.05)}
+.bubble-myth.popped{animation:pop .4s forwards}
+@keyframes pop{0%{transform:scale(1);opacity:1}50%{transform:scale(1.2);opacity:.7}100%{transform:scale(.8);opacity:0}}
+.bubble-myth.reveal-truth{background:rgba(74,187,128,.15);border-color:#4abb80;cursor:default;transform:none!important;opacity:1!important}
+/* Level 3: Smile poster */
+.smile-selector{display:flex;justify-content:center;gap:1.5rem;margin:2rem 0;flex-wrap:wrap}
+.smile-option{width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.08);border:2px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:2.2rem;cursor:pointer;transition:all .3s}
+.smile-option:hover{background:rgba(201,169,110,.15);border-color:var(--gold);transform:scale(1.1)}
+.smile-option.selected{background:rgba(201,169,110,.2);border-color:var(--gold);box-shadow:0 0 30px rgba(201,169,110,.3)}
+.poster-preview{max-width:380px;margin:1.5rem auto;padding:2.5rem 1.5rem;border-radius:20px;background:linear-gradient(135deg,#0f1b2d,#1a3050);border:1px solid rgba(201,169,110,.3);position:relative;overflow:hidden}
+.poster-preview::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(201,169,110,.1),transparent 60%)}
+.poster-emoji{font-size:4rem;margin-bottom:.5rem}
+.poster-text{font-family:'Noto Serif SC',serif;font-size:1.2rem;color:var(--gold-light);margin:.5rem 0}
+.poster-sub{font-size:.78rem;color:rgba(255,255,255,.4);margin-top:1rem}
+.game-btn{background:var(--gold);color:var(--navy);border:none;padding:.75rem 2.2rem;border-radius:50px;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .3s;margin-top:1rem}
+.game-btn:hover{background:var(--gold-light);transform:translateY(-2px)}
+.game-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.game-result{font-size:1.1rem;color:var(--gold-light);margin:1.5rem 0;line-height:1.8}
+
+/* ===== Smile Wall ===== */
+.smilewall-section{background:var(--cream);padding:5rem 2rem}
+.smilewall-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;max-width:var(--container);margin:2rem auto 0}
+.smilewall-card{border-radius:16px;overflow:hidden;background:var(--white);box-shadow:0 4px 20px rgba(0,0,0,.06);transition:all .3s;position:relative}
+.smilewall-card:hover{transform:translateY(-4px);box-shadow:0 8px 40px rgba(0,0,0,.1)}
+.smilewall-avatar{width:100%;aspect-ratio:1;background:linear-gradient(135deg,var(--cream-dark),var(--cream));display:flex;align-items:center;justify-content:center;font-size:4rem}
+.smilewall-body{padding:1rem 1.2rem}
+.smilewall-name{font-weight:600;font-size:.85rem;color:var(--navy)}
+.smilewall-desc{font-size:.78rem;color:var(--text-light);margin:.3rem 0;line-height:1.5}
+.smilewall-likes{font-size:.75rem;color:var(--gold);display:flex;align-items:center;gap:.4rem;margin-top:.4rem}
+.smilewall-likes button{background:none;border:none;cursor:pointer;color:var(--gold);font-size:1rem;padding:2px}
+.smilewall-upload-btn{background:var(--navy);color:var(--white);border:none;padding:.7rem 2rem;border-radius:50px;font-size:.85rem;cursor:pointer;transition:all .3s}
+.smilewall-upload-btn:hover{background:var(--navy-light);transform:translateY(-2px)}
+</style>
+</head>
+<body>
+
+<div id="scroll-progress"></div>
+<canvas id="particle-canvas"></canvas>
+
+<!-- ===== Navigation ===== -->
+<nav id="navbar">
+  <img class="logo" src="logo横板透明.png" alt="云南白药" style="height:28px;">
+  <ul class="nav-links" role="list">
+    <li><a href="#heritage">品牌故事</a></li>
+    <li><a href="#benefit-1">护口有方</a></li>
+    <li><a href="#anti">钻白闪耀</a></li>
+    <li><a href="#youth">敢吃敢笑</a></li>
+    <li><a href="#scent">雪沁山茶</a></li>
+    <li><a href="#specs">产品档案</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="菜单">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-overlay" id="navOverlay">
+  <a href="#heritage">品牌故事</a>
+  <a href="#benefit-1">护口有方</a>
+  <a href="#anti">钻白闪耀</a>
+  <a href="#youth">敢吃敢笑</a>
+  <a href="#scent">雪沁山茶</a>
+  <a href="#specs">产品档案</a>
+</div>
+
+<!-- ===== Hero ===== -->
+<section class="hero" id="top">
+  <div class="diamond-grid"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <div class="brand-tag reveal">云南白药口腔健康</div>
+      <div class="slogan-tag reveal reveal-delay-1">品牌口号 · <strong>好口腔 吃出幸福感</strong></div>
+      <h1 class="reveal reveal-delay-1">
+        护口有方<br>
+        <span class="accent">钻白闪耀</span>
+      </h1>
+      <p class="subtitle reveal reveal-delay-2">
+        云南白药提取物 · 3抗美白配方 · 雪沁山茶香氛<br>
+        以百年制药科技，重新定义健康美白
+      </p>
+      <div class="magnetic-wrap reveal reveal-delay-3">
+        <a href="#anti" class="hero-cta btn-magnetic ripple-btn cta-glow" aria-label="探索产品功效" data-strength="30">
+          <span class="btn-text">探索产品功效</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="hero-visual reveal reveal-delay-2">
+      <div class="product-glow"></div>
+      <div class="product-frame">
+        <img src="产品示意图1.png" alt="云南白药光钻白PRO牙膏">
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll-indicator">
+    <span>向下探索</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ===== Brand Heritage ===== -->
+<section class="brand-heritage" id="heritage">
+  <div class="section-inner">
+    <div class="heritage-grid">
+      <div class="heritage-text">
+        <div class="year reveal">1902</div>
+        <div class="year-label reveal reveal-delay-1">始 于 一 九 零 二</div>
+        <p class="reveal reveal-delay-2">
+          <span class="highlight">曲焕章先生</span>创制云南白药，百余年来以其<br>
+          独特、神奇的功效被誉为 <span class="highlight">「中华瑰宝，伤科圣药」</span>。<br><br>
+          2005年，第一支云南白药牙膏问世，以<span class="highlight">医药科技<br>
+          赋能口腔健康</span>，开创功能性口腔护理全新篇章。<br><br>
+          深耕二十余载，始终秉持 <span class="highlight">「医药科技，提升口腔健康」</span><br>
+          的核心理念，将专业制药标准融入口腔护理研发与生产。
+        </p>
+      </div>
+      <div class="heritage-stats">
+        <div class="heritage-stat reveal reveal-delay-1">
+          <div class="number">124</div>
+          <div class="label">年品牌历史</div>
+        </div>
+        <div class="heritage-stat reveal reveal-delay-2">
+          <div class="number">7<span class="gold">年</span></div>
+          <div class="label">连续行业销量第一</div>
+        </div>
+        <div class="heritage-stat reveal reveal-delay-3">
+          <div class="number">20<span class="gold">+</span></div>
+          <div class="label">年口腔护理深耕</div>
+        </div>
+        <div class="heritage-stat reveal reveal-delay-4">
+          <div class="number">万千</div>
+          <div class="label">家庭信赖之选</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Benefit 1: 护口有方 ===== -->
+<section class="benefit" id="benefit-1">
+  <div class="benefit-inner">
+    <div class="benefit-visual aspect-3-4 reveal">
+      <img src="产品示意图2.png" alt="云南白药提取物" loading="lazy">
+      <div class="visual-overlay"></div>
+    </div>
+    <div class="benefit-content">
+      <div class="benefit-number reveal">— 01</div>
+      <h2 class="reveal reveal-delay-1">护口有方</h2>
+      <p class="reveal reveal-delay-2">
+        不是一支基础的美白牙膏。<strong style="color:var(--navy);">特别添加云南白药提取物</strong>，
+        帮助强韧口腔健康屏障，减轻牙龈出血、牙龈肿痛、口腔黏膜损伤等口腔问题。
+      </p>
+      <p class="reveal reveal-delay-3">
+        有效抵御麻辣热烫、酸甜重口饮食刺激，无惧日常饮食困扰，
+        <strong style="color:var(--navy);">想吃就吃</strong>，为牙齿焕白筑牢口腔健康根基。
+      </p>
+      <div class="pillar-grid reveal reveal-delay-4">
+        <div class="pillar-item">
+          <span class="icon" role="img" aria-label="盾牌">🛡️</span>
+          <div class="title">强韧屏障</div>
+          <div class="desc">云南白药提取物<br>守护口腔健康</div>
+        </div>
+        <div class="pillar-item">
+          <span class="icon" role="img" aria-label="辣椒">🌶️</span>
+          <div class="title">无畏饮食</div>
+          <div class="desc">麻辣热烫酸甜<br>想吃就吃</div>
+        </div>
+        <div class="pillar-item">
+          <span class="icon" role="img" aria-label="微笑">😊</span>
+          <div class="title">健康根基</div>
+          <div class="desc">为牙齿焕白<br>筑牢健康底色</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 美白不伤牙 Mythbusting ===== -->
+<section class="mythbust" id="mythbust">
+  <div class="mythbust-inner">
+    <div class="mythbust-visual reveal">
+      <span class="myth-icon">⚖️</span>
+      <div style="display:flex;gap:2rem;justify-content:center;margin-top:1rem">
+        <div>
+          <span class="myth-label myth">❌ 美白 = 伤牙</span>
+          <p style="font-size:.78rem;color:var(--text-light);margin-top:.5rem;line-height:1.6">传统美白牙膏靠研磨剂<br>强行磨白，损伤牙釉质</p>
+        </div>
+        <div>
+          <span class="myth-label fact">✅ 护口再钻白</span>
+          <p style="font-size:.78rem;color:var(--text-light);margin-top:.5rem;line-height:1.6">云南白药提取物先修护<br>口腔屏障，健康焕白</p>
+        </div>
+      </div>
+    </div>
+    <div class="mythbust-content">
+      <div class="benefit-number reveal">— 打破误区</div>
+      <h2 class="reveal reveal-delay-1">美白 ≠ 伤牙<br>先护口，再钻白</h2>
+      <p class="reveal reveal-delay-2">
+        你是否也认为"美白牙膏会刺激牙龈、让牙齿变敏感"？
+        <strong style="color:var(--navy);">光钻白PRO打破这一固有认知</strong>。
+      </p>
+      <p class="reveal reveal-delay-3">
+        先以云南白药提取物<span style="color:var(--navy);font-weight:600">修护口腔健康屏障</span>，
+        再以温和的3抗美白配方<span style="color:var(--navy);font-weight:600">精准焕白</span>。
+        不伤牙、不敏感，真正实现「口腔健康才能更好美白」。
+      </p>
+      <div class="compare-flow reveal reveal-delay-4">
+        <div class="step">
+          <span class="step-icon" role="img" aria-label="盾牌">🛡️</span>
+          <span class="step-label">云南白药提取物<br>强韧口腔屏障</span>
+        </div>
+        <span class="arrow">→</span>
+        <div class="step">
+          <span class="step-icon" role="img" aria-label="钻石">💎</span>
+          <span class="step-label">3抗美白配方<br>温和焕白</span>
+        </div>
+        <span class="arrow">→</span>
+        <div class="step">
+          <span class="step-icon" role="img" aria-label="微笑">✨</span>
+          <span class="step-label">健康 + 亮白<br>敢吃敢笑敢闪耀</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Interactive Game: 钻白闯关 ===== -->
+<section class="game-section" id="game-dental">
+  <div class="game-inner">
+    <div class="section-label reveal" style="color:var(--gold-light)">🦷 科学护牙互动</div>
+    <h2 class="reveal reveal-delay-1" style="font-size:clamp(1.6rem,2.8vw,2.2rem);font-weight:700;font-family:'Noto Serif SC',serif;">护口有方 · 钻白闯关</h2>
+    <p class="reveal reveal-delay-2" style="color:rgba(255,255,255,.5);font-size:.9rem;margin-bottom:.5rem;">3 关挑战 · 测测你的护牙知识</p>
+
+    <!-- Progress -->
+    <div class="game-progress reveal reveal-delay-3">
+      <div class="game-step active" data-step="1">1</div>
+      <div class="game-step" data-step="2">2</div>
+      <div class="game-step" data-step="3">3</div>
+    </div>
+
+    <!-- Level 1: 红绿灯 -->
+    <div class="game-panel active" id="game-level1">
+      <p style="color:rgba(255,255,255,.6);font-size:.9rem;margin-bottom:.5rem;">把下面的行为拖到正确分类——</p>
+      <p style="font-size:.8rem;color:rgba(255,255,255,.3);margin-bottom:1.5rem;">（点击卡片选择分类）</p>
+      <div style="display:flex;justify-content:center;gap:2rem;margin-bottom:1rem;flex-wrap:wrap">
+        <span style="display:flex;align-items:center;gap:.4rem;font-size:.8rem;color:#4abb80">🟢 健康行为</span>
+        <span style="display:flex;align-items:center;gap:.4rem;font-size:.8rem;color:#ff6b6b">🔴 有害行为</span>
+      </div>
+      <div class="game-card-grid" id="cardGrid"></div>
+      <div class="game-feedback" id="feedback1"></div>
+      <button class="game-btn" id="checkLevel1" disabled>确认答案</button>
+    </div>
+
+    <!-- Level 2: 误区粉碎 -->
+    <div class="game-panel" id="game-level2">
+      <p style="color:rgba(255,255,255,.6);font-size:.9rem;margin-bottom:.5rem;">戳破美白误区，看看真相是什么——</p>
+      <p style="font-size:.8rem;color:rgba(255,255,255,.3);margin-bottom:1.5rem;">点击气泡揭穿误区</p>
+      <div class="bubble-grid" id="bubbleGrid"></div>
+      <div class="game-result" id="level2Result"></div>
+      <button class="game-btn" id="nextToLevel3" style="display:none">解锁第三关 →</button>
+    </div>
+
+    <!-- Level 3: 笑容海报 -->
+    <div class="game-panel" id="game-level3">
+      <p style="color:rgba(255,255,255,.6);font-size:.9rem;margin-bottom:.5rem;">选择你的自信笑容，生成专属海报——</p>
+      <div class="smile-selector" id="smileSelector">
+        <div class="smile-option" data-smile="😁">😁</div>
+        <div class="smile-option" data-smile="😄">😄</div>
+        <div class="smile-option" data-smile="😊">😊</div>
+        <div class="smile-option" data-smile="🫶">🫶</div>
+        <div class="smile-option" data-smile="✨">✨</div>
+      </div>
+      <div class="poster-preview" id="posterPreview">
+        <div class="poster-emoji" id="posterEmoji">😁</div>
+        <div class="poster-text" id="posterText">敢吃敢笑敢闪耀</div>
+        <div class="poster-sub">云南白药光钻白PRO · 护口有方，钻白闪耀</div>
+      </div>
+      <div style="margin-top:.8rem;font-size:.78rem;color:rgba(255,255,255,.3);">👆 长按或截图分享你的自信笑容</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Smile Wall ===== -->
+<section class="smilewall-section" id="smilewall">
+  <div style="max-width:var(--container);margin:0 auto;text-align:center;">
+    <div class="section-label reveal" style="color:var(--gold)">✨ 自信笑容墙</div>
+    <h2 class="reveal reveal-delay-1" style="font-size:clamp(1.6rem,2.8vw,2.2rem);color:var(--navy);font-weight:700;font-family:'Noto Serif SC',serif;">敢吃 · 敢笑 · 敢闪耀</h2>
+    <p class="reveal reveal-delay-2" style="color:var(--text-light);font-size:.9rem;">来自真实用户的自信笑容 · 你也可以成为其中一员</p>
+    <div class="smilewall-grid" id="smilewallGrid"></div>
+    <button class="smilewall-upload-btn reveal" onclick="alert('上传功能开发中，欢迎截图分享你的笑容！')">🙋 上传我的笑容</button>
+  </div>
+</section>
+<section class="benefit" id="compare" style="background:var(--white);padding:6rem 2rem;">
+  <div style="max-width:var(--container);margin:0 auto;text-align:center;">
+    <div class="section-label reveal">互动体验</div>
+    <h2 class="reveal reveal-delay-1" style="font-size:clamp(1.8rem,3vw,2.4rem);color:var(--navy);font-weight:700;margin-bottom:.5rem;font-family:'Noto Serif SC',serif;">轻轻一划，看见改变</h2>
+    <p class="reveal reveal-delay-2" style="color:var(--text-light);font-size:.95rem;margin-bottom:1rem;">拖动滑块对比 <strong style="color:var(--navy);">使用前</strong> 与 <strong style="color:var(--navy);">使用光钻白PRO 3天后</strong> 的色阶变化</p>
+    <div class="comparison-wrap reveal reveal-delay-3" id="comparison">
+      <div style="position:relative;background:linear-gradient(135deg,#d4c8b8,#c4b8a8);aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;">
+        <span style="color:#8a7a6a;font-size:1rem;letter-spacing:.1em;">⬤ 使用前 — 牙渍明显</span>
+      </div>
+      <div class="comparison-overlay" id="comparisonOverlay" style="width:50%;">
+        <div style="width:100%;height:100%;background:linear-gradient(135deg,#f0ece4,#e8e4dc);display:flex;align-items:center;justify-content:center;">
+          <span style="color:var(--navy);font-size:1rem;font-weight:600;letter-spacing:.1em;">✨ 使用3天后 — 钻白透亮</span>
+        </div>
+      </div>
+      <div class="comparison-handle" id="comparisonHandle"></div>
+      <span class="comparison-label before">使用前</span>
+      <span class="comparison-label after">使用后</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Anti-Three: 钻白闪耀 ===== -->
+<section class="anti-three" id="anti">
+  <div class="section-label reveal">— 02 钻白闪耀</div>
+  <h2 class="reveal reveal-delay-1">3抗美白配方</h2>
+  <p class="subtitle reveal reveal-delay-2">抗渍 · 抗牙结石 · 抗牙菌斑 — 三重协同，精准焕白</p>
+
+  <div class="anti-grid">
+    <div class="anti-card reveal reveal-delay-1">
+      <span class="emoji-icon" role="img" aria-label="清洁">🧴</span>
+      <h3>抗渍</h3>
+      <p>有效瓦解外源性牙渍，<br>咖啡、茶渍、烟渍等<br>表面着色一网打尽</p>
+    </div>
+    <div class="anti-card reveal reveal-delay-2">
+      <span class="emoji-icon" role="img" aria-label="钻石">💎</span>
+      <h3>抗牙结石</h3>
+      <p>抑制牙结石堆积，<br>从源头预防色素沉着，<br>让亮白更持久</p>
+    </div>
+    <div class="anti-card reveal reveal-delay-3">
+      <span class="emoji-icon" role="img" aria-label="牙齿">🦷</span>
+      <h3>抗牙菌斑</h3>
+      <p>抑制牙菌斑滋生，<br>减少口腔细菌附着，<br>守护牙齿天然光泽</p>
+    </div>
+  </div>
+
+  <div class="anti-result reveal">
+    <div class="big-number">3天<span style="font-size:.6em;">提升</span>10<span style="font-size:.5em;color:rgba(255,255,255,.4);">个色阶</span></div>
+    <div class="big-number-sub">实证焕白功效</div>
+    <p>经实验室实证，3天即可显著提升美白色阶，<br>让牙齿呈现通透钻白光感，亮白更持久。</p>
+  </div>
+</section>
+
+<!-- ===== 敢吃敢笑敢闪耀 (Youth Lifestyle) ===== -->
+<section class="youth-section" id="youth">
+  <div class="section-label reveal">Z世代 · 年轻主张</div>
+  <div class="youth-tagline reveal reveal-delay-1">敢吃 · 敢笑 · 敢闪耀</div>
+  <p class="youth-desc reveal reveal-delay-2">
+    校园社交、日常拍照、面试出镜、精致约会 —<br>
+    每一个需要大方展露笑容的时刻，光钻白PRO都在。
+  </p>
+  <div class="youth-scenes">
+    <div class="youth-card reveal reveal-delay-1">
+      <div class="scene-media"><img src="images/youth-campus.jpg" alt="校园社交" loading="lazy"></div>
+      <span class="scene-emoji" role="img" aria-label="校园">🎓</span>
+      <h3>校园社交</h3>
+      <p>和同学谈笑风生，<br>自信露齿，<br>笑容就是最好的名片</p>
+    </div>
+    <div class="youth-card reveal reveal-delay-2">
+      <div class="scene-media"><img src="images/woman-portrait.jpg" alt="日常拍照" loading="lazy"></div>
+      <span class="scene-emoji" role="img" aria-label="拍照">📸</span>
+      <h3>日常拍照</h3>
+      <p>原相机直出无压力，<br>钻白笑容自带打光，<br>每一张都是氛围感大片</p>
+    </div>
+    <div class="youth-card reveal reveal-delay-3">
+      <div class="scene-media"><img src="images/businesswoman.jpg" alt="面试出镜" loading="lazy"></div>
+      <span class="scene-emoji" role="img" aria-label="面试">💼</span>
+      <h3>面试出镜</h3>
+      <p>自信表达，从容应对，<br>干净的牙齿和笑容<br>是加分的第一印象</p>
+    </div>
+    <div class="youth-card reveal reveal-delay-4">
+      <div class="scene-media"><img src="images/date-dinner.jpg" alt="精致约会" loading="lazy"></div>
+      <span class="scene-emoji" role="img" aria-label="约会">💕</span>
+      <h3>精致约会</h3>
+      <p>雪沁山茶的清雅香氛，<br>让每一次靠近都充满<br>治愈力的高级感</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Social Proof ===== -->
+<section class="social-proof">
+  <span class="stars" role="img" aria-label="五星好评">⭐⭐⭐⭐⭐</span>
+  <div class="rating-text">4.9 · 超10万条真实好评</div>
+  <div class="rating-sub">源自天猫 · 抖音旗舰店用户评价</div>
+  <div class="testimonial-grid">
+    <div class="testimonial-card reveal reveal-delay-1">
+      <p>用了两周牙齿明显变白，而且真的不刺激牙龈！之前用别的美白牙膏总是牙龈出血，这款完全不会。</p>
+      <div class="author">— 小鹿****（大学生 · 已购3次）</div>
+    </div>
+    <div class="testimonial-card reveal reveal-delay-2">
+      <p>雪沁山茶的味道太好闻了，早上刷牙幸福感满满。面试的时候被问是不是用了什么香水哈哈。</p>
+      <div class="author">— Rachel***（应届毕业生）</div>
+    </div>
+    <div class="testimonial-card reveal reveal-delay-3">
+      <p>回购第三支了，坚持用真的能看出色阶变化。吃火锅嗦螺蛳粉都不怕，护口效果太强了。</p>
+      <div class="author">— 爱吃****（大四 · 美食博主）</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Scent ===== -->
+<section class="scent" id="scent">
+  <div class="scent-inner">
+    <div class="section-label reveal">— 03</div>
+    <h2 class="reveal reveal-delay-1">雪沁山茶</h2>
+    <p class="scent-desc reveal reveal-delay-2">
+      取自云南，定制高端专属香型。采用轻奢调香工艺，
+      打造清冽淡雅、层次丰富的治愈系情绪香氛。
+    </p>
+    <div class="scent-layers" id="scentLayers">
+      <div id="scentParticles"></div>
+      <div class="scent-layer reveal reveal-delay-1">
+        <div class="scent-bg"><img src="images/camellia-flower.jpg" alt="" loading="lazy"></div>
+        <span class="layer-label top">前 调</span>
+        <h3>❄️ 白山茶</h3>
+        <div class="notes">清冽淡雅 · 纯净如雪<br>宛如晨间第一缕山风拂过</div>
+      </div>
+      <div class="scent-layer reveal reveal-delay-2">
+        <div class="scent-bg"><img src="images/mint.jpg" alt="" loading="lazy"></div>
+        <span class="layer-label mid">中 调</span>
+        <h3>🌿 椒样薄荷 + 留兰</h3>
+        <div class="notes">清爽提神 · 沁人心脾<br>唤醒感官的清新活力</div>
+      </div>
+      <div class="scent-layer reveal reveal-delay-3">
+        <div class="scent-bg"><img src="images/tea-leaves.jpg" alt="" loading="lazy"></div>
+        <span class="layer-label base">后 调</span>
+        <h3>🍃 冰岛白茶 + 天竺葵</h3>
+        <div class="notes">温润高级 · 余韵悠长<br>如沐春风般的治愈尾韵</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Product Specs + Price ===== -->
+<section class="specs" id="specs">
+  <div class="specs-inner">
+    <div class="section-label reveal">产品档案</div>
+    <h2 class="reveal reveal-delay-1" style="font-size:clamp(1.5rem,2.5vw,2rem);color:var(--navy);font-weight:700;margin-bottom:2rem;font-family:'Noto Serif SC',serif;">云南白药光钻白PRO牙膏</h2>
+    <div class="specs-grid reveal reveal-delay-2">
+      <div class="spec-item"><span class="label">产品名称</span><span class="value">云南白药光钻白PRO牙膏</span></div>
+      <div class="spec-item"><span class="label">核心成分</span><span class="value">云南白药提取物、水合硅石、植酸钠</span></div>
+      <div class="spec-item"><span class="label">核心功效</span><span class="value">抗渍、抗牙结石、抗牙菌斑、美白、清新口气</span></div>
+      <div class="spec-item"><span class="label">香型</span><span class="value">雪沁山茶（定制高端香型）</span></div>
+      <div class="spec-item"><span class="label">适用人群</span><span class="value">追求牙齿美白与口腔健康的年轻消费群体</span></div>
+      <div class="spec-item"><span class="label">品牌理念</span><span class="value">医药科技，提升口腔健康</span></div>
+    </div>
+    <div class="price-row reveal">
+      <div class="price"><span class="currency">¥</span>69.9 <span class="original">¥89.9</span></div>
+      <a href="#" class="buy-btn" aria-label="立即购买">
+        立即购买
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4zM3 6h18M16 10a4 4 0 01-8 0"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Market Leader ===== -->
+<section class="market-leader">
+  <div class="section-inner">
+    <div class="reveal">
+      <div class="big-stat">连续7年</div>
+      <div class="stat-label">中国口腔护理行业市场份额第一</div>
+      <p>数据来源：尼尔森 · 2019-2025年中国口腔护理行业销售额数据</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta-section">
+  <h2 class="reveal">好口腔 吃出幸福感</h2>
+  <p class="reveal reveal-delay-1">以百年制药科技，守护每一次自信绽放。<br>云南白药光钻白PRO — 护口有方，钻白闪耀。</p>
+  <button class="cta-button reveal reveal-delay-2" onclick="document.getElementById('specs').scrollIntoView({behavior:'smooth'})" aria-label="立即选购">
+    立即选购
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </button>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer>
+  <img class="footer-logo" src="logo横板透明.png" alt="云南白药" loading="lazy">
+  <!-- 国货之光点赞 -->
+  <div style="text-align:center;margin:1.5rem 0;padding:1rem;background:rgba(201,169,110,.08);border-radius:12px;border:1px solid rgba(201,169,110,.2)">
+    <p style="font-size:.78rem;color:var(--gold);margin-bottom:.5rem;letter-spacing:.1em;">🇨🇳 中国智造 · 国货之光</p>
+    <button id="guohuoBtn" style="background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--navy);border:none;padding:.6rem 2rem;border-radius:50px;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;gap:.5rem;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''" onclick="(function(){var c=document.getElementById('guohuoCount'),n=parseInt(localStorage.getItem('ynby_likes')||'2847')+1;localStorage.setItem('ynby_likes',n);c.textContent=n.toLocaleString();this.style.transform='scale(1.1)';setTimeout(()=>this.style.transform='',200)})()">
+      ❤️ 为国货点赞 <span id="guohuoCount" style="font-weight:700;min-width:2rem;display:inline-block">2,847</span>
+    </button>
+    <p style="font-size:.7rem;color:rgba(255,255,255,.3);margin-top:.5rem;">已有 <span id="guohuoCountDisplay" style="color:var(--gold)">2,847</span> 人为中国智造点赞</p>
+  </div>
+  <div class="social-links">
+    <a href="https://mall.jd.com" target="_blank" rel="noopener">天猫 · 云南白药牙膏官方旗舰店</a>
+    <a href="https://www.douyin.com" target="_blank" rel="noopener">抖音 · 云南白药个人护理旗舰店</a>
+    <a href="#" target="_blank" rel="noopener">微信 · 云南白药健康汇</a>
+    <a href="#" target="_blank" rel="noopener">小红书 · 云南白药个护</a>
+    <a href="#" target="_blank" rel="noopener">微博 · 云南白药牙膏</a>
+  </div>
+  <div>云南白药集团股份有限公司</div>
+  <div class="hashtags">
+    #云南白药光钻白牙膏 #护口有方钻白闪耀 #第18届大广赛<br>
+    @云南白药个人护理旗舰店（抖音） @云南白药个护（小红书）
+  </div>
+  <div style="margin-top:1rem;opacity:.5">© 2026 云南白药. All rights reserved.</div>
+</footer>
+
+<script>
+// ===== 0. Smooth anchor scroll =====
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'})}
+)});
+
+// ===== 1. Hamburger Menu =====
+const hamburger=document.getElementById('hamburger');
+const overlay=document.getElementById('navOverlay');
+hamburger.addEventListener('click',()=>{
+  hamburger.classList.toggle('active');
+  overlay.classList.toggle('open');
+  document.body.style.overflow=overlay.classList.contains('open')?'hidden':'';
+});
+overlay.querySelectorAll('a').forEach(a=>{
+  a.addEventListener('click',()=>{
+    hamburger.classList.remove('active');
+    overlay.classList.remove('open');
+    document.body.style.overflow='';
+  });
+});
+
+// ===== 2. Navbar scroll (GSAP) =====
+const navbar=document.getElementById('navbar');
+window.addEventListener('scroll',()=>{
+  navbar.classList.toggle('scrolled',window.scrollY>60);
+},{passive:true});
+
+// ===== 3. Scroll-based Animations (IntersectionObserver) =====
+// 3a. Scroll progress bar
+let ticking=false;
+document.addEventListener('scroll',()=>{
+  if(!ticking){requestAnimationFrame(()=>{
+    const scrollTop=document.documentElement.scrollTop;
+    const scrollHeight=document.documentElement.scrollHeight-window.innerHeight;
+    document.getElementById('scroll-progress').style.width=(scrollTop/scrollHeight*100)+'%';
+    ticking=false;
+  });ticking=true;}
+},{passive:true});
+
+// 3b. Navbar link active state
+const navSections=document.querySelectorAll('section[id]');
+const navLinks=document.querySelectorAll('.nav-links a');
+const navIO=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      navLinks.forEach(a=>{
+        a.style.color=a.getAttribute('href')==='#'+entry.target.id?'var(--gold)':'rgba(255,255,255,.75)';
+      });
+    }
+  });
+},{rootMargin:'-40% 0px -55% 0px'});
+navSections.forEach(s=>navIO.observe(s));
+
+// 3c. Universal Reveal Observer — handles all .reveal elements (except hero)
+const revealIO=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+      revealIO.unobserve(entry.target);
+    }
+  });
+},{threshold:.12,rootMargin:'0px 0px -20px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>{
+  if(!el.closest('.hero-text'))revealIO.observe(el);
+});
+
+// 3d. Hero entrance — GSAP-powered
+gsap.set('.hero-text .reveal',{opacity:0,y:50});
+gsap.set('.hero-visual.reveal',{opacity:0,scale:.92});
+gsap.to('.hero-text .reveal',{opacity:1,y:0,duration:1,stagger:.15,ease:'power3.out'});
+gsap.to('.hero-visual.reveal',{opacity:1,scale:1,duration:1.2,ease:'power3.out',delay:.3});
+
+// 3e. Stat counters
+const statNums=document.querySelectorAll('.heritage-stat .number');
+const counterIO=new IntersectionObserver((entries,obs)=>{
+  entries.forEach(entry=>{
+    if(!entry.isIntersecting)return;
+    const el=entry.target;
+    const text=el.textContent.trim();
+    const num=parseFloat(text.replace(/[^0-9.]/g,''));
+    if(isNaN(num))return;
+    const suffix=text.replace(/[0-9]/g,'');
+    el.textContent='0'+suffix;
+    gsap.to({val:0},{val:num,duration:2,ease:'power3.out',
+      onUpdate:function(){el.textContent=Math.round(this.targets()[0].val)+suffix;}
+    });
+    obs.unobserve(el);
+  });
+},{threshold:.5});
+statNums.forEach(el=>counterIO.observe(el));
+
+// 3f-3l. Stagger animations — wrapped in IO for on-brand GSAP smoothness
+const staggerIO=new IntersectionObserver((entries,obs)=>{
+  entries.forEach(entry=>{
+    if(!entry.isIntersecting)return;
+    const el=entry.target;
+    if(el.classList.contains('anti-card'))
+      gsap.fromTo(el,{opacity:0,y:40},{opacity:1,y:0,duration:.8,ease:'power3.out',clearProps:'all'});
+    else if(el.classList.contains('youth-card'))
+      gsap.fromTo(el,{opacity:0,y:30},{opacity:1,y:0,duration:.7,ease:'power3.out',clearProps:'all'});
+    else if(el.classList.contains('testimonial-card'))
+      gsap.fromTo(el,{opacity:0,y:30},{opacity:1,y:0,duration:.7,ease:'power3.out',clearProps:'all'});
+    else if(el.classList.contains('scent-layer'))
+      gsap.fromTo(el,{opacity:0,y:30},{opacity:1,y:0,duration:.7,ease:'power3.out',clearProps:'all'});
+    obs.unobserve(el);
+  });
+},{threshold:.15});
+document.querySelectorAll('.anti-card').forEach((el,i)=>{setTimeout(()=>staggerIO.observe(el),i*150)});
+document.querySelectorAll('.youth-card').forEach((el,i)=>{setTimeout(()=>staggerIO.observe(el),i*100)});
+document.querySelectorAll('.testimonial-card').forEach((el,i)=>{setTimeout(()=>staggerIO.observe(el),i*120)});
+document.querySelectorAll('.scent-layer').forEach((el,i)=>{setTimeout(()=>staggerIO.observe(el),i*150)});
+
+// Scent particles on scent section enter
+const scentObserver=new IntersectionObserver((entries,obs)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){createScentParticles();obs.unobserve(entry.target)}
+  });
+},{threshold:.3});
+const scentLayers=document.querySelector('.scent-layers');
+if(scentLayers)scentObserver.observe(scentLayers);
+
+// 3j. Specs table
+const specsIO=new IntersectionObserver((entries,obs)=>{
+  entries.forEach(entry=>{
+    if(!entry.isIntersecting)return;
+    gsap.fromTo(entry.target,{opacity:0,y:30},{opacity:1,y:0,duration:.8,ease:'power3.out',clearProps:'all'});
+    obs.unobserve(entry.target);
+  });
+},{threshold:.2});
+document.querySelectorAll('.specs-grid, .price-row').forEach(el=>specsIO.observe(el));
+
+// 3k. Market leader stat
+const marketIO=new IntersectionObserver((entries,obs)=>{
+  entries.forEach(entry=>{
+    if(!entry.isIntersecting)return;
+    const stat=entry.target;
+    gsap.fromTo(stat,{opacity:0,y:30},{opacity:1,y:0,duration:.8,ease:'power3.out',clearProps:'all',onStart:()=>{
+      gsap.to(stat,{scale:1.05,duration:.4,yoyo:true,repeat:1,ease:'power1.inOut'});
+    }});
+    obs.unobserve(entry.target);
+  });
+},{threshold:.2});
+const bigStat=document.querySelector('.market-leader .big-stat');
+if(bigStat)marketIO.observe(bigStat);
+
+
+// ===== 4. Magnetic Button Effect =====
+document.querySelectorAll('.btn-magnetic').forEach(btn=>{
+  btn.addEventListener('mousemove',e=>{
+    const rect=btn.getBoundingClientRect();
+    const x=e.clientX-rect.left-rect.width/2;
+    const y=e.clientY-rect.top-rect.height/2;
+    const s=parseFloat(btn.dataset.strength)||20;
+    gsap.to(btn,{x:x/rect.width*s,y:y/rect.height*s,duration:.4,ease:'power2.out',overwrite:'auto'});
+  });
+  btn.addEventListener('mouseleave',()=>{
+    gsap.to(btn,{x:0,y:0,duration:.6,ease:'elastic.out(1,.4)'});
+  });
+});
+
+// ===== 5. Button Ripple =====
+document.querySelectorAll('.ripple-btn').forEach(btn=>{
+  btn.addEventListener('click',function(e){
+    const rect=this.getBoundingClientRect();
+    const r=document.createElement('span');
+    r.className='ripple';
+    const size=Math.max(rect.width,rect.height);
+    r.style.width=r.style.height=size+'px';
+    r.style.left=e.clientX-rect.left-size/2+'px';
+    r.style.top=e.clientY-rect.top-size/2+'px';
+    this.appendChild(r);
+    r.addEventListener('animationend',()=>r.remove());
+  });
+});
+
+// ===== 6. Before/After Comparator =====
+(function(){
+  const wrap=document.getElementById('comparison');
+  if(!wrap)return;
+  const overlay=document.getElementById('comparisonOverlay');
+  const handle=document.getElementById('comparisonHandle');
+  let isDragging=false;
+
+  function setPos(pct){
+    pct=Math.max(5,Math.min(95,pct));
+    overlay.style.width=pct+'%';
+    handle.style.left=pct+'%';
+  }
+
+  wrap.addEventListener('mousedown',()=>isDragging=true);
+  window.addEventListener('mouseup',()=>isDragging=false);
+  wrap.addEventListener('mousemove',e=>{
+    if(!isDragging)return;
+    const rect=wrap.getBoundingClientRect();
+    setPos((e.clientX-rect.left)/rect.width*100);
+  });
+
+  wrap.addEventListener('touchstart',()=>isDragging=true);
+  window.addEventListener('touchend',()=>isDragging=false);
+  wrap.addEventListener('touchmove',e=>{
+    if(!isDragging)return;
+    const rect=wrap.getBoundingClientRect();
+    setPos((e.touches[0].clientX-rect.left)/rect.width*100);
+  });
+})();
+
+// ===== 7. Scent Floating Particles =====
+function createScentParticles(){
+  const container=document.getElementById('scentParticles');
+  if(!container||container.children.length>0)return;
+  const colors=['#c9a96e','#e8d5a8','#a8c8a8','#f0ece4','#d4c8b8'];
+  for(let i=0;i<25;i++){
+    const p=document.createElement('div');
+    p.className='scent-particle';
+    const size=Math.random()*8+3;
+    p.style.width=size+'px';
+    p.style.height=size+'px';
+    p.style.left=Math.random()*100+'%';
+    p.style.bottom=Math.random()*40+10+'%';
+    p.style.animationDelay=Math.random()*5+'s';
+    p.style.animationDuration=(4+Math.random()*4)+'s';
+    p.style.background=`radial-gradient(circle,${colors[i%colors.length]},transparent)`;
+    container.appendChild(p);
+  }
+}
+
+// ===== 8. Diamond Sparkle Particles (Enhanced) =====
+const canvas=document.getElementById('particle-canvas'),ctx=canvas.getContext('2d');
+let particles=[],mouseX=-1000,mouseY=-1000,animId=null;
+
+function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight}
+resizeCanvas();
+window.addEventListener('resize',resizeCanvas);
+
+class Particle{
+  constructor(){this.reset()}
+  reset(){
+    this.x=Math.random()*canvas.width;this.y=Math.random()*canvas.height;
+    this.size=Math.random()*3+1;
+    this.speedX=(Math.random()-.5)*.4;this.speedY=(Math.random()-.5)*.4;
+    this.opacity=Math.random()*.5+.1;this.pulse=Math.random()*Math.PI*2;
+    this.pulseSpeed=.02+Math.random()*.03;this.shape=Math.random()>.5?'diamond':'circle'
+  }
+  update(){
+    this.x+=this.speedX;this.y+=this.speedY;this.pulse+=this.pulseSpeed;
+    const dx=this.x-mouseX,dy=this.y-mouseY,dist=Math.sqrt(dx*dx+dy*dy);
+    if(dist<150&&dist>0){const force=(150-dist)/150*.6;this.x+=dx/dist*force;this.y+=dy/dist*force}
+    if(this.x<0||this.x>canvas.width||this.y<0||this.y>canvas.height)this.reset()
+  }
+  draw(){
+    const alpha=this.opacity*(.5+.5*Math.sin(this.pulse));
+    ctx.save();ctx.globalAlpha=alpha;ctx.fillStyle='#c9a96e';
+    if(this.shape==='diamond'){ctx.translate(this.x,this.y);ctx.rotate(Math.PI/4);ctx.fillRect(-this.size/2,-this.size/2,this.size,this.size)}
+    else{ctx.beginPath();ctx.arc(this.x,this.y,this.size/2,0,Math.PI*2);ctx.fill()}
+    ctx.restore()
+  }
+}
+for(let i=0;i<100;i++)particles.push(new Particle());
+
+document.addEventListener('mousemove',e=>{mouseX=e.clientX;mouseY=e.clientY});
+document.addEventListener('touchmove',e=>{mouseX=e.touches[0].clientX;mouseY=e.touches[0].clientY});
+
+function animateParticles(){ctx.clearRect(0,0,canvas.width,canvas.height);particles.forEach(p=>{p.update();p.draw()});animId=requestAnimationFrame(animateParticles)}
+animateParticles();
+
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden&&animId){cancelAnimationFrame(animId);animId=null}
+  else if(!document.hidden&&!animId)animateParticles()
+
+});
+</script>
+
+<script>
+// Game data
+const l1Cards=[
+  {id:0,text:'用温水刷牙',isHealthy:true,fact:'温水不刺激牙龈，更能有效溶解牙膏'},
+  {id:1,text:'饭后立即用牙线',isHealthy:true,fact:'牙线能清除牙缝残渣，预防牙菌斑'},
+  {id:2,text:'睡前吃甜食不刷牙',isHealthy:false,fact:'糖分整夜发酵会严重腐蚀牙釉质！'},
+  {id:3,text:'喝碳酸饮料后立即刷牙',isHealthy:false,fact:'碳酸软化牙釉质，立即刷牙会加剧磨损！建议等30分钟'},
+  {id:4,text:'使用含氟牙膏',isHealthy:true,fact:'氟化物能有效预防龋齿，加固牙釉质'},
+  {id:5,text:'定期洗牙',isHealthy:true,fact:'每半年洗一次牙，预防牙结石堆积'},
+  {id:6,text:'用硬毛牙刷用力刷',isHealthy:false,fact:'硬毛会损伤牙龈和牙釉质！推荐软毛牙刷'},
+  {id:7,text:'吸烟',isHealthy:false,fact:'吸烟导致牙渍沉积和牙龈萎缩，危害口腔健康'},
+  {id:8,text:'饭后漱口',isHealthy:true,fact:'清水漱口能冲走食物残渣，保持口腔清洁'},
+  {id:9,text:'吃酸性食物后马上刷牙',isHealthy:false,fact:'酸软化牙釉质，马上刷牙会加剧磨损！建议等30分钟'}
+];
+const l2Myths=[
+  {myth:'美白牙膏越磨越白',truth:'光钻白PRO采用温和生物美白，不依赖研磨，同时修护牙釉质'},
+  {myth:'美白一定会伤牙',truth:'先护口再钻白——云南白药提取物修护屏障后再温和焕白'},
+  {myth:'冷光美白一劳永逸',truth:'美白效果需要维护，光钻白PRO日常使用持续巩固'},
+  {myth:'牙膏泡沫越多越好',truth:'泡沫多少与清洁力无关，光钻白PRO低泡配方更温和'},
+  {myth:'牙齿越白越健康',truth:'健康牙齿是自然的象牙白，过度漂白反而损伤牙釉质'},
+  {myth:'刷牙越用力越干净',truth:'轻柔打圈刷牙最有效，配合光钻白PRO事半功倍'}
+];
+const smileData=[
+  {name:'上海 · 小陈',emoji:'😁',desc:'用了一个月，咖啡渍淡了好多！现在拍照敢露齿笑了',likes:42},
+  {name:'广州 · 小林',emoji:'😊',desc:'以前不敢吃麻辣火锅怕牙黄，现在真的想吃就吃',likes:38},
+  {name:'北京 · 小王',emoji:'😄',desc:'男朋友说我笑起来更有自信了，光钻白PRO绝绝子',likes:56},
+  {name:'成都 · 小张',emoji:'✨',desc:'3天就看到效果，不愧是云南白药的品质',likes:29},
+  {name:'杭州 · 小李',emoji:'🫶',desc:'先护口再美白这个理念太好了，牙龈不出血了',likes:47},
+  {name:'深圳 · 小刘',emoji:'😁',desc:'茶渍真的没了！终于敢对镜头大笑了',likes:33}
+];
+(function(){
+  const c=document.getElementById('cardGrid');if(!c)return;
+  l1Cards.sort(()=>Math.random()-.5);
+  c.innerHTML=l1Cards.map(e=>'<div class="game-card'+(e.isHealthy?' healthy':' unhealthy')+'" data-id="'+e.id+'">'+e.text+'</div>').join('');
+  const cards=c.querySelectorAll('.game-card');
+  const sel={};
+  cards.forEach(el=>{el.addEventListener('click',()=>{
+    const id=parseInt(el.dataset.id);
+    if(sel[id]!==undefined)return;
+    el.classList.toggle('selected');
+    sel[id]=el.classList.contains('selected')?el.classList.contains('healthy'):undefined;
+    if(!el.classList.contains('selected'))delete sel[id];
+    document.getElementById('checkLevel1').disabled=Object.keys(sel).length<l1Cards.length;
+  })});
+  document.getElementById('checkLevel1').addEventListener('click',()=>{
+    let ok=0;const fb=document.getElementById('feedback1');
+    cards.forEach(el=>{
+      const id=parseInt(el.dataset.id),card=l1Cards.find(c=>c.id===id),s=sel[id];
+      if(s===undefined)return;
+      if(s===card.isHealthy){ok++;el.classList.add('selected')}
+      else{
+        el.classList.add('wrong');
+        setTimeout(()=>{el.classList.remove('selected','wrong');fb.className='game-feedback wrong show';fb.innerHTML='❌ <strong>答错了！</strong>'+card.fact},400);
+      }
+    });
+    if(ok===l1Cards.length){
+      fb.className='game-feedback correct show';fb.innerHTML='🎉 <strong>全部正确！</strong>你已掌握科学护牙基础知识！';
+      setTimeout(()=>{
+        document.querySelector('.game-step[data-step="1"]').classList.add('done');
+        document.querySelector('.game-step[data-step="1"]').classList.remove('active');
+        document.querySelector('.game-step[data-step="2"]').classList.add('active');
+        document.getElementById('game-level1').classList.remove('active');
+        document.getElementById('game-level2').classList.add('active');
+        initLevel2();
+      },1500);
+    }
+  });
+})();
+function initLevel2(){
+  const g=document.getElementById('bubbleGrid');
+  l2Myths.sort(()=>Math.random()-.5);
+  g.innerHTML=l2Myths.map((m,i)=>'<div class="bubble-myth" data-idx="'+i+'">'+m.myth+'</div>').join('');
+  let popped=0;
+  g.querySelectorAll('.bubble-myth').forEach(el=>{el.addEventListener('click',function(){
+    if(this.classList.contains('popped')||this.classList.contains('reveal-truth'))return;
+    const i=parseInt(this.dataset.idx);this.classList.add('popped');popped++;
+    setTimeout(()=>{this.textContent='✅ '+l2Myths[i].truth;this.classList.remove('popped');this.classList.add('reveal-truth');if(popped===l2Myths.length){document.getElementById('level2Result').textContent='🎉 所有误区已粉碎！你对美白知识了如指掌！';document.getElementById('nextToLevel3').style.display='inline-block'}},400);
+  })});
+  document.getElementById('nextToLevel3').addEventListener('click',()=>{
+    document.querySelector('.game-step[data-step="2"]').classList.add('done');
+    document.querySelector('.game-step[data-step="2"]').classList.remove('active');
+    document.querySelector('.game-step[data-step="3"]').classList.add('active');
+    document.getElementById('game-level2').classList.remove('active');
+    document.getElementById('game-level3').classList.add('active');
+  });
+}
+(function(){
+  const opts=document.querySelectorAll('.smile-option');if(!opts.length)return;
+  opts.forEach(el=>{el.addEventListener('click',()=>{opts.forEach(o=>o.classList.remove('selected'));el.classList.add('selected');document.getElementById('posterEmoji').textContent=el.dataset.smile})});
+  opts[0].classList.add('selected');
+})();
+(function(){
+  const g=document.getElementById('smilewallGrid');if(!g)return;
+  g.innerHTML=smileData.map(s=>'<div class="smilewall-card"><div class="smilewall-avatar">'+s.emoji+'</div><div class="smilewall-body"><div class="smilewall-name">'+s.name+'</div><div class="smilewall-desc">"'+s.desc+'"</div><div class="smilewall-likes"><button onclick="this.nextElementSibling.textContent=parseInt(this.nextElementSibling.textContent)+1;this.style.transform=\'scale(1.3)\';setTimeout(()=>this.style.transform=\'\',200)">💛</button><span>'+s.likes+'</span></div></div></div>').join('');
+})();</script>
+</html>
