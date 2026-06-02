@@ -1235,11 +1235,15 @@ document.querySelectorAll('.reveal').forEach(el=>{
   if(!el.closest('.hero-text'))revealIO.observe(el);
 });
 
-// 3d. Hero entrance — GSAP-powered
-gsap.set('.hero-text .reveal',{opacity:0,y:50});
-gsap.set('.hero-visual.reveal',{opacity:0,scale:.92});
-gsap.to('.hero-text .reveal',{opacity:1,y:0,duration:1,stagger:.15,ease:'power3.out'});
-gsap.to('.hero-visual.reveal',{opacity:1,scale:1,duration:1.2,ease:'power3.out',delay:.3});
+// 3d. Hero entrance — GSAP-powered (fallback if GSAP not loaded)
+if(typeof gsap!=='undefined'){
+  gsap.set('.hero-text .reveal',{opacity:0,y:50});
+  gsap.set('.hero-visual.reveal',{opacity:0,scale:.92});
+  gsap.to('.hero-text .reveal',{opacity:1,y:0,duration:1,stagger:.15,ease:'power3.out'});
+  gsap.to('.hero-visual.reveal',{opacity:1,scale:1,duration:1.2,ease:'power3.out',delay:.3});
+}else{
+  document.querySelectorAll('.hero-text .reveal,.hero-visual.reveal').forEach(el=>{el.style.opacity='1';el.style.transform='none';});
+}
 
 // 3e. Stat counters
 const statNums=document.querySelectorAll('.heritage-stat .number');
