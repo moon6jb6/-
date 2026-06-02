@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>云南白药光钻白PRO — 项目介绍</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --navy: #0f1b2d;
+  --navy-light: #1a3050;
+  --navy-mid: #2a4060;
+  --gold: #c9a96e;
+  --gold-light: #e8d5a8;
+  --gold-dark: #a8884a;
+  --cream: #f7f5f0;
+  --cream-dark: #efe9e0;
+  --white: #ffffff;
+  --teal: #7a9e7a;
+  --text: #1a1a1a;
+  --text-secondary: #555;
+}
+
+@page {
+  size: A4;
+  margin: 0;
+}
+
+body {
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 11pt;
+  line-height: 1.8;
+  color: var(--text);
+  background: var(--white);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* ===== PAGE SYSTEM ===== */
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 20mm 25mm;
+  page-break-after: always;
+  position: relative;
+  overflow: hidden;
+}
+.page:last-child { page-break-after: avoid; }
+
+/* ===== COVER PAGE ===== */
+.cover {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 50%, var(--navy) 100%);
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 40mm 30mm;
+}
+.cover::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse at 20% 30%, rgba(201,169,110,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(201,169,110,0.06) 0%, transparent 50%);
+  pointer-events: none;
+}
+.cover::after {
+  content: '';
+  position: absolute;
+  top: 15mm; left: 15mm; right: 15mm; bottom: 15mm;
+  border: 1px solid rgba(201,169,110,0.2);
+  border-radius: 2px;
+  pointer-events: none;
+}
+.cover-badge {
+  display: inline-block;
+  padding: 4px 20px;
+  border: 1px solid var(--gold);
+  border-radius: 20px;
+  font-size: 9pt;
+  letter-spacing: 3px;
+  color: var(--gold);
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+.cover-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 32pt;
+  font-weight: 900;
+  letter-spacing: 6px;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+}
+.cover-subtitle {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 16pt;
+  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 1;
+}
+.cover-slogan {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 13pt;
+  color: var(--gold-light);
+  letter-spacing: 8px;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 1;
+}
+.cover-divider {
+  width: 120px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-light), var(--gold), var(--gold-light), transparent);
+  margin: 0 auto 30px;
+  position: relative;
+  z-index: 1;
+}
+.cover-info {
+  font-size: 9.5pt;
+  color: rgba(255,255,255,0.6);
+  line-height: 2;
+  position: relative;
+  z-index: 1;
+}
+.cover-info strong { color: var(--gold-light); font-weight: 500; }
+
+/* ===== CONTENT PAGES ===== */
+.content-page {
+  background: var(--white);
+  padding: 18mm 22mm 20mm;
+}
+.content-page::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--navy), var(--gold), var(--navy));
+}
+
+/* ===== TYPOGRAPHY ===== */
+h1 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 20pt;
+  font-weight: 900;
+  color: var(--navy);
+  margin-bottom: 6mm;
+  padding-bottom: 3mm;
+  border-bottom: 2px solid var(--gold);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+h1 .num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px; height: 32px;
+  background: var(--navy);
+  color: var(--gold);
+  border-radius: 50%;
+  font-size: 12pt;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+h2 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 13pt;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 6mm 0 3mm;
+  padding-left: 12px;
+  border-left: 3px solid var(--gold);
+}
+
+h3 {
+  font-size: 11pt;
+  font-weight: 700;
+  color: var(--navy-light);
+  margin: 4mm 0 2mm;
+}
+
+p { margin-bottom: 3mm; text-align: justify; }
+
+/* ===== LISTS ===== */
+ul, ol { margin: 2mm 0 4mm 5mm; }
+li { margin-bottom: 1.5mm; }
+li strong { color: var(--navy); }
+
+/* ===== TABLES ===== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4mm 0 6mm;
+  font-size: 10pt;
+}
+th {
+  background: var(--navy);
+  color: var(--white);
+  padding: 8px 12px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 9.5pt;
+}
+td {
+  padding: 7px 12px;
+  border-bottom: 1px solid #e8e4dc;
+}
+tr:nth-child(even) td { background: rgba(247,245,240,0.5); }
+tr:last-child td { border-bottom: 2px solid var(--gold); }
+
+/* ===== CARDS ===== */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4mm;
+  margin: 4mm 0 6mm;
+}
+.card-grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.card {
+  background: var(--cream);
+  border-radius: 6px;
+  padding: 4mm;
+  border-left: 3px solid var(--gold);
+}
+.card-title {
+  font-weight: 700;
+  color: var(--navy);
+  font-size: 10.5pt;
+  margin-bottom: 2mm;
+}
+.card p {
+  font-size: 9.5pt;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ===== FLOW DIAGRAM ===== */
+.flow {
+  display: flex;
+  flex-direction: column;
+  gap: 2mm;
+  margin: 4mm 0 6mm;
+}
+.flow-step {
+  display: flex;
+  align-items: center;
+  gap: 3mm;
+  background: var(--cream);
+  padding: 3mm 4mm;
+  border-radius: 4px;
+  font-size: 10pt;
+}
+.flow-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px; height: 24px;
+  background: var(--navy);
+  color: var(--gold);
+  border-radius: 50%;
+  font-size: 9pt;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.flow-label { font-weight: 600; color: var(--navy); }
+.flow-desc { color: var(--text-secondary); font-size: 9.5pt; }
+
+/* ===== HIGHLIGHT BOX ===== */
+.highlight-box {
+  background: linear-gradient(135deg, rgba(15,27,45,0.03), rgba(201,169,110,0.08));
+  border: 1px solid rgba(201,169,110,0.2);
+  border-radius: 6px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+}
+
+/* ===== COLOR SWATCH ===== */
+.color-row {
+  display: flex;
+  gap: 3mm;
+  margin: 3mm 0 5mm;
+  flex-wrap: wrap;
+}
+.color-swatch {
+  display: flex;
+  align-items: center;
+  gap: 3mm;
+  padding: 2mm 3mm;
+  background: var(--cream);
+  border-radius: 4px;
+  font-size: 9.5pt;
+}
+.color-dot {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.1);
+  flex-shrink: 0;
+}
+
+/* ===== FOOTER ===== */
+.page-footer {
+  position: absolute;
+  bottom: 10mm;
+  left: 22mm;
+  right: 22mm;
+  display: flex;
+  justify-content: space-between;
+  font-size: 8pt;
+  color: #aaa;
+  border-top: 1px solid #eee;
+  padding-top: 2mm;
+}
+
+/* ===== SUMMARY BOX ===== */
+.summary-box {
+  background: linear-gradient(135deg, var(--navy), var(--navy-mid));
+  color: var(--white);
+  border-radius: 8px;
+  padding: 5mm 6mm;
+  margin: 6mm 0;
+}
+.summary-box h3 {
+  color: var(--gold);
+  margin-top: 0;
+}
+.summary-box p {
+  color: rgba(255,255,255,0.85);
+  font-size: 10pt;
+}
+
+/* ===== TAG ===== */
+.tag {
+  display: inline-block;
+  padding: 1px 10px;
+  background: var(--navy);
+  color: var(--gold);
+  border-radius: 10px;
+  font-size: 8.5pt;
+  font-weight: 500;
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== PAGE 1: COVER ==================== -->
+<div class="page cover">
+  <div class="cover-badge">第18届全国大学生广告艺术大赛 · UI类参赛作品</div>
+  <h1 class="cover-title">云南白药光钻白PRO</h1>
+  <div class="cover-subtitle">电商详情页设计说明</div>
+  <div class="cover-divider"></div>
+  <div class="cover-slogan">护口有方 · 钻白闪耀</div>
+  <div class="cover-info">
+    <strong>品牌</strong>　云南白药集团<br>
+    <strong>设计</strong>　Moon6JB<br>
+    <strong>工具</strong>　Claude Code · 设计审核Agent · 视觉分析Agent<br>
+    <strong>日期</strong>　2026年5月
+  </div>
+</div>
+
+<!-- ==================== PAGE 2: 项目概述 ==================== -->
+<div class="page content-page">
+  <h1><span class="num">1</span>项目概述</h1>
+
+  <h2>项目背景</h2>
+  <p>云南白药光钻白PRO牙膏详情页是第18届全国大学生广告艺术大赛（大广赛）的参赛作品。页面围绕云南白药光钻白PRO牙膏「护口有方，钻白闪耀」的核心主张，面向年轻消费群体，打造一款兼具品牌调性与电商转化力的沉浸式产品详情页。</p>
+
+  <h2>设计目标</h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-title">品牌传达</div>
+      <p>以云南白药124年的制药底蕴为信任背书，传递「医药科技，提升口腔健康」的品牌理念</p>
+    </div>
+    <div class="card">
+      <div class="card-title">教育转化</div>
+      <p>破除「美白＝伤牙」的社会误区，建立「先护口，再钻白」的产品认知</p>
+    </div>
+    <div class="card">
+      <div class="card-title">社会价值</div>
+      <p>以真实数据揭示中国国民口腔健康危机，将产品价值嵌入社会问题语境</p>
+    </div>
+    <div class="card">
+      <div class="card-title">互动体验</div>
+      <p>通过拖拽对比、知识闯关等交互设计提升用户参与感和停留时长</p>
+    </div>
+  </div>
+
+  <h2>目标受众</h2>
+  <ul>
+    <li>18–35岁有一线城市消费习惯的年轻群体</li>
+    <li>关注牙齿美白但担心"伤牙"的潜在消费者</li>
+    <li>有牙渍、牙龈出血、牙齿敏感等常见口腔问题的用户</li>
+    <li>偏好国货、支持民族品牌的新一代消费者</li>
+  </ul>
+
+  <div class="page-footer">
+    <span>云南白药光钻白PRO · 设计说明</span>
+    <span>2</span>
+  </div>
+</div>
+
+<!-- ==================== PAGE 3: 社会问题回应 ==================== -->
+<div class="page content-page">
+  <h1><span class="num">2</span>社会问题回应</h1>
+
+  <h2>中国国民口腔健康现状</h2>
+  <p>页面核心创新之一是<em>将社会问题数据融入产品叙事</em>。在品牌传承之后、产品介绍之前，专门设置了「国民口腔健康现状」数据板块，建立"为什么需要这款产品"的紧迫感。</p>
+
+  <table>
+    <thead>
+      <tr><th>指标</th><th>数据</th><th>来源</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>35-44岁成年人牙结石检出率</td><td><strong>96.7%</strong></td><td>第四次全国口腔健康流行病学调查</td></tr>
+      <tr><td>成年人牙龈出血检出率</td><td><strong>87.4%</strong></td><td>同上（较十年前上升10.1pp）</td></tr>
+      <tr><td>35岁以上牙齿敏感患病率</td><td><strong>>58%</strong></td><td>中华口腔医学会</td></tr>
+      <tr><td>中国牙周病患者总数</td><td><strong>9亿</strong></td><td>《促进牙周健康中国专家建议》</td></tr>
+      <tr><td>受访者受牙渍困扰比例</td><td><strong>51.04%</strong></td><td>2025居民口腔健康消费白皮书</td></tr>
+    </tbody>
+  </table>
+
+  <h2>社会问题与产品的关联逻辑</h2>
+  <p>数据板块的叙事线索遵循三层结构：</p>
+  <div class="flow">
+    <div class="flow-step">
+      <span class="flow-num">1</span>
+      <span class="flow-label">问题揭示</span>
+      <span class="flow-desc">——"每10个中国人，9个有口腔问题"，用大数字制造视觉冲击和认知震撼</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-num">2</span>
+      <span class="flow-label">认知落差</span>
+      <span class="flow-desc">——"但大多数人从未主动就诊"，点出日常护理缺失的现实</span>
+    </div>
+    <div class="flow-step">
+      <span class="flow-num">3</span>
+      <span class="flow-label">解决方案引入</span>
+      <span class="flow-desc">——"口腔健康，从日常护理开始"，自然过渡到产品</span>
+    </div>
+  </div>
+
+  <h2>政策契合</h2>
+  <div class="highlight-box">
+    <ul>
+      <li><strong>《健康口腔行动方案（2019-2025年）》</strong>——推动从"疾病治疗"转向"健康管理"</li>
+      <li><strong>《牙膏监督管理办法》</strong>（2023年12月实施）——功效宣称合规，已在页面注明"经实验室实证"</li>
+      <li><strong>《广告法》第十一条</strong>——数据引用标注来源（已标注第四次全国口腔健康流行病学调查等）</li>
+    </ul>
+  </div>
+
+  <div class="page-footer">
+    <span>云南白药光钻白PRO · 设计说明</span>
+    <span>3</span>
+  </div>
+</div>
+
+<!-- ==================== PAGE 4: 设计理念 ==================== -->
+<div class="page content-page">
+  <h1><span class="num">3</span>设计理念与视觉方向</h1>
+
+  <h2>美学定位</h2>
+  <p>页面采用<em>新中式奢侈美学</em>的设计语言，以云南白药124年医药底蕴为根基，融合现代轻奢视觉元素。调性克制而精致，沉稳中透露出自信。以深海军蓝为底色，香槟金为提亮，营造医药专业感与高端质感的平衡。不像传统电商页面的"叫卖式"设计，而是以杂志式编辑手法传递品牌故事。</p>
+
+  <h2>色彩系统</h2>
+  <div class="color-row">
+    <div class="color-swatch"><div class="color-dot" style="background:#0f1b2d"></div>海军蓝 #0f1b2d</div>
+    <div class="color-swatch"><div class="color-dot" style="background:#1a3050"></div>亮海军蓝 #1a3050</div>
+    <div class="color-swatch"><div class="color-dot" style="background:#c9a96e"></div>香槟金 #c9a96e</div>
+    <div class="color-swatch"><div class="color-dot" style="background:#e8d5a8"></div>金亮色 #e8d5a8</div>
+    <div class="color-swatch"><div class="color-dot" style="background:#f7f5f0"></div>奶油白 #f7f5f0</div>
+    <div class="color-swatch"><div class="color-dot" style="background:#7a9e7a"></div>茶绿 #7a9e7a</div>
+  </div>
+
+  <h2>字体系统</h2>
+  <table>
+    <thead><tr><th>用途</th><th>字体</th><th>字重</th></tr></thead>
+    <tbody>
+      <tr><td>标题/展示</td><td>Noto Serif SC（思源宋体）</td><td>700, 900</td></tr>
+      <tr><td>正文/UI</td><td>Noto Sans SC（思源黑体）</td><td>300, 400, 500, 700</td></tr>
+    </tbody>
+  </table>
+  <p>选择 Noto Serif SC 作为标题字体，是为了传递云南白药百年品牌的<em>历史厚重感</em>与<em>东方韵味</em>。搭配 Noto Sans SC 作为正文，保证长篇幅阅读的清晰度。</p>
+
+  <h1 style="margin-top:10mm"><span class="num">4</span>页面结构与用户体验流</h1>
+
+  <h2>页面板块总览</h2>
+  <p>页面共包含12个核心板块，按用户浏览顺序排列：</p>
+  <div class="flow">
+    <div class="flow-step"><span class="flow-num">1</span><span class="flow-label">Hero 视觉区</span><span class="flow-desc">—— 产品展示 + 品牌主张</span></div>
+    <div class="flow-step"><span class="flow-num">2</span><span class="flow-label">品牌传承</span><span class="flow-desc">—— 124年历史 · 行业地位</span></div>
+    <div class="flow-step"><span class="flow-num">3</span><span class="flow-label">国民口腔健康数据</span><span class="flow-desc">—— 社会问题紧迫感</span></div>
+    <div class="flow-step"><span class="flow-num">4</span><span class="flow-label">护口有方</span><span class="flow-desc">—— 云南白药提取物功效</span></div>
+    <div class="flow-step"><span class="flow-num">5</span><span class="flow-label">美白≠伤牙</span><span class="flow-desc">—— 破除误区</span></div>
+    <div class="flow-step"><span class="flow-num">6</span><span class="flow-label">互动闯关</span><span class="flow-desc">—— 护牙知识游戏</span></div>
+    <div class="flow-step"><span class="flow-num">7</span><span class="flow-label">轻轻一划</span><span class="flow-desc">—— 拖拽对比滑条</span></div>
+    <div class="flow-step"><span class="flow-num">8</span><span class="flow-label">3抗配方</span><span class="flow-desc">—— 抗渍 · 抗牙结石 · 抗牙菌斑</span></div>
+    <div class="flow-step"><span class="flow-num">9</span><span class="flow-label">Z世代场景</span><span class="flow-desc">—— 社交 · 面试 · 约会</span></div>
+    <div class="flow-step"><span class="flow-num">10</span><span class="flow-label">雪沁山茶</span><span class="flow-desc">—— 香氛体验</span></div>
+    <div class="flow-step"><span class="flow-num">11</span><span class="flow-label">产品档案</span><span class="flow-desc">—— 参数 · 价格 · 购买</span></div>
+    <div class="flow-step"><span class="flow-num">12</span><span class="flow-label">CTA + Footer</span><span class="flow-desc">—— 行动号召 · 国货点赞</span></div>
+  </div>
+
+  <div class="page-footer">
+    <span>云南白药光钻白PRO · 设计说明</span>
+    <span>4</span>
+  </div>
+</div>
+
+<!-- ==================== PAGE 5: 叙事结构 ==================== -->
+<div class="page content-page">
+  <h2>叙事结构</h2>
+  <p>页面遵循经典的「问题→认知→解决方案→信任→行动」营销叙事弧：</p>
+
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-title">Hook — 吸引</div>
+      <p>Hero区产品展示 + "护口有方，钻白闪耀"品牌主张</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Trust — 信任</div>
+      <p>品牌传承：124年历史 + 行业第一地位建立信任</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Crisis — 危机</div>
+      <p>国民口腔健康数据：制造问题紧迫感</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Solution — 方案</div>
+      <p>护口有方 + 3抗配方：产品功效</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Reassurance — 安心</div>
+      <p>美白≠伤牙：打消顾虑</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Engagement — 参与</div>
+      <p>游戏 + 对比：互动加深认知</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Lifestyle — 生活</div>
+      <p>Z世代场景：用户自我投射</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Conversion — 转化</div>
+      <p>价格 + CTA：购买转化</p>
+    </div>
+  </div>
+
+  <h1 style="margin-top:8mm"><span class="num">5</span>视觉与交互设计</h1>
+
+  <h2>滚动揭示动画</h2>
+  <ul>
+    <li><strong>.reveal 类</strong>——CSS transition + JavaScript IntersectionObserver，在元素进入视口时触发透明度与位移动画</li>
+    <li><strong>GSAP 高级动画</strong>——三大功效卡片区域使用 GSAP fromTo 动画，实现更复杂的入场效果</li>
+    <li><strong>滚动进度条</strong>——页面顶部实时显示阅读进度</li>
+  </ul>
+
+  <h2>Before / After 对比滑条</h2>
+  <ul>
+    <li>纯 JavaScript + CSS 实现，不依赖外部库</li>
+    <li>拖拽滑块切换"使用前/使用3天后"效果</li>
+    <li>配合"3天提升10个色阶"的数据宣称，提供视觉化佐证</li>
+  </ul>
+
+  <h2>护牙知识闯关游戏</h2>
+  <div class="highlight-box">
+    <p><strong>三关设计：</strong>行为分类 → 误区戳破 → 笑容海报生成。全前端 JavaScript 实现，游戏化设计提升页面互动率和停留时长。</p>
+  </div>
+
+  <h2>交互细节</h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-title">Magnetic Button</div>
+      <p>鼠标悬停时按钮跟随鼠标偏移</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Ripple Effect</div>
+      <p>点击按钮产生波纹扩散效果</p>
+    </div>
+    <div class="card">
+      <div class="card-title">国货点赞</div>
+      <p>LocalStorage 持久化点赞计数</p>
+    </div>
+    <div class="card">
+      <div class="card-title">响应式导航</div>
+      <p>固定导航栏 + 响应式汉堡菜单</p>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <span>云南白药光钻白PRO · 设计说明</span>
+    <span>5</span>
+  </div>
+</div>
+
+<!-- ==================== PAGE 6: 数据引用 ==================== -->
+<div class="page content-page">
+  <h1><span class="num">6</span>数据引用与合规说明</h1>
+
+  <p>页面中引用的所有数据均标注了来源，确保符合《广告法》第十一条关于数据引用的规定：</p>
+
+  <table>
+    <thead><tr><th>数据</th><th>来源标注</th></tr></thead>
+    <tbody>
+      <tr><td>"中国成年人口腔疾病患病率超过90%"</td><td>第四次全国口腔健康流行病学调查</td></tr>
+      <tr><td>"96.7%成年人有牙结石"</td><td>第四次全国口腔健康流行病学调查</td></tr>
+      <tr><td>"87.4%成年人牙龈出血"</td><td>第四次全国口腔健康流行病学调查</td></tr>
+      <tr><td>"58%成年人牙齿敏感"</td><td>中华口腔医学会</td></tr>
+      <tr><td>"9亿牙周病患者"</td><td>《促进牙周健康中国专家建议》</td></tr>
+      <tr><td>"连续7年行业第一"</td><td>尼尔森2019-2025销售额数据</td></tr>
+      <tr><td>"3天提升10个色阶"</td><td>经实验室实证（标注实际效果因人而异）</td></tr>
+    </tbody>
+  </table>
+
+  <h2>合规处理要点</h2>
+  <ul>
+    <li>功效宣称（抗渍、抗牙结石、抗牙菌斑）均在《牙膏分类目录》允许范围内</li>
+    <li>"行业第一"标注了数据来源（尼尔森）和时间范围（2019-2025）</li>
+    <li>避免了对竞品的直接贬低表述（"传统美白牙膏靠研磨剂"改为中性描述）</li>
+    <li>用户评价证言为虚构示例，非真实消费者反馈，在比赛场景下使用</li>
+  </ul>
+
+  <h1 style="margin-top:10mm"><span class="num">7</span>技术实现</h1>
+
+  <h2>技术栈</h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-title">核心框架</div>
+      <p>纯原生 HTML5 + CSS3 + JavaScript，不依赖任何前端框架</p>
+    </div>
+    <div class="card">
+      <div class="card-title">动画引擎</div>
+      <p>GSAP 3.12.5（GreenSock Animation Platform）高级滚动动画</p>
+    </div>
+    <div class="card">
+      <div class="card-title">字体加载</div>
+      <p>Google Fonts：Noto Serif SC + Noto Sans SC</p>
+    </div>
+    <div class="card">
+      <div class="card-title">滚动监听</div>
+      <p>IntersectionObserver API 滚动触发揭示动画</p>
+    </div>
+  </div>
+
+  <h2>性能优化</h2>
+  <ul>
+    <li>图片使用 <code>loading="lazy"</code> 属性延迟加载</li>
+    <li>CSS 动画优先于 JavaScript 动画（减少主线程阻塞）</li>
+    <li>字体使用 <code>font-display: swap</code> 防止阻塞渲染</li>
+    <li>响应式设计——面向移动端和桌面端</li>
+  </ul>
+
+  <div class="page-footer">
+    <span>云南白药光钻白PRO · 设计说明</span>
+    <span>6</span>
+  </div>
+</div>
+
+<!-- ==================== PAGE 7: 总结 ==================== -->
+<div class="page content-page">
+  <h1><span class="num">8</span>总结</h1>
+
+  <div class="summary-box">
+    <h3>设计核心</h3>
+    <p>云南白药光钻白PRO详情页的设计核心在于<em>将社会价值嵌入产品叙事</em>。通过真实数据的引入，页面不再是一个单纯的电商详情页，而是一个具有社会洞察的整合传播方案。</p>
+  </div>
+
+  <p>数据板块的加入让消费者在了解产品之前先意识到问题的严重性，从而建立更强的购买动机。同时，通过品牌传承、破除误区、互动游戏、对比体验等多层次内容，页面实现了从品牌信任到产品认知再到购买转化的完整链路。</p>
+
+  <h2>作品亮点总结</h2>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-title">数据驱动叙事</div>
+      <p>引入5组权威口腔健康数据，将产品价值嵌入社会问题语境，提升说服力</p>
+    </div>
+    <div class="card">
+      <div class="card-title">游戏化互动</div>
+      <p>三关护牙知识闯关游戏，提升用户参与感和页面停留时长</p>
+    </div>
+    <div class="card">
+      <div class="card-title">新中式美学</div>
+      <p>海军蓝+香槟金配色，杂志式编辑排版，传递百年品牌的历史厚重感</p>
+    </div>
+    <div class="card">
+      <div class="card-title">完整转化链路</div>
+      <p>从Hook到Conversion的8步叙事弧，实现品牌信任→产品认知→购买转化</p>
+    </div>
+  </div>
+
+  <h2>在线预览</h2>
+  <div class="highlight-box">
+    <p style="text-align:center;font-size:12pt;margin:2mm 0">
+      <strong>GitHub Pages</strong><br>
+      <span style="color:var(--gold);font-weight:600">https://moon6jb6.github.io/-/</span>
+    </p>
+  </div>
+
+  <div style="text-align:center;margin-top:15mm">
+    <div class="cover-divider" style="margin:0 auto 8mm"></div>
+    <p style="font-family:'Noto Serif SC',serif;color:var(--gold);font-size:11pt;letter-spacing:4px">—— 护口有方，钻白闪耀 ——</p>
+  </div>
+
+  <div class="page-footer">
+    <span>云南白药光钻白PRO · 设计说明</span>
+    <span>7</span>
+  </div>
+</div>
+
+</body>
+</html>
