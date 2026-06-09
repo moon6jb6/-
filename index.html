@@ -984,11 +984,11 @@ footer .hashtags{color:rgba(255,255,255,.25);font-size:.7rem;letter-spacing:.05e
     <p class="reveal reveal-delay-2" style="color:var(--text-light);font-size:.95rem;margin-bottom:1rem;">拖动滑块对比 <strong style="color:var(--navy);">使用前</strong> 与 <strong style="color:var(--navy);">使用光钻白PRO 3天后</strong> 的色阶变化</p>
     <div class="comparison-wrap reveal reveal-delay-3" id="comparison">
       <div style="position:relative;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;overflow:hidden;">
-        <img src="images/teeth-after.png" alt="使用前" style="width:100%;height:100%;object-fit:cover;">
+        <img src="images/teeth-after.png" alt="使用3天后" style="width:100%;height:100%;object-fit:cover;">
       </div>
       <div class="comparison-overlay" id="comparisonOverlay" style="width:50%;">
         <div style="width:100%;height:100%;overflow:hidden;">
-          <img src="images/teeth-before.png" alt="使用3天后" style="width:100%;height:100%;object-fit:cover;">
+          <img src="images/teeth-before.png" alt="使用前" style="width:100%;height:100%;object-fit:cover;">
         </div>
       </div>
       <div class="comparison-handle" id="comparisonHandle"></div>
@@ -1223,7 +1223,7 @@ footer .hashtags{color:rgba(255,255,255,.25);font-size:.7rem;letter-spacing:.05e
   <!-- 国货之光点赞 -->
   <div style="text-align:center;margin:1.5rem 0;padding:1rem;background:rgba(201,169,110,.08);border-radius:12px;border:1px solid rgba(201,169,110,.2)">
     <p style="font-size:.78rem;color:var(--gold);margin-bottom:.5rem;letter-spacing:.1em;"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--gold)" stroke="none" style="vertical-align:-2px"><rect x="2" y="4" width="20" height="16" rx="2" fill="none" stroke="var(--gold)" stroke-width="1.5"/><path d="M12 9h4M12 13h4M12 17h4" stroke="var(--gold)" stroke-width="1.5"/><circle cx="7" cy="9" r="1" fill="var(--gold)"/></svg> 中国智造 · 国货之光</p>
-    <button id="guohuoBtn" style="background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--navy);border:none;padding:.6rem 2rem;border-radius:50px;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;gap:.5rem;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''" onclick="(function(){var c=document.getElementById('guohuoCount'),n=parseInt(localStorage.getItem('ynby_likes')||'2847')+1;localStorage.setItem('ynby_likes',n);c.textContent=n.toLocaleString();this.style.transform='scale(1.1)';setTimeout(()=>this.style.transform='',200)})()">
+    <button id="guohuoBtn" style="background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--navy);border:none;padding:.6rem 2rem;border-radius:50px;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;gap:.5rem;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''" onclick="(function(){var c=document.getElementById('guohuoCount'),d=document.getElementById('guohuoCountDisplay'),n=parseInt(localStorage.getItem('ynby_likes')||'2847')+1;localStorage.setItem('ynby_likes',n);c.textContent=n.toLocaleString();d.textContent=n.toLocaleString();this.style.transform='scale(1.1)';setTimeout(()=>this.style.transform='',200)})()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--gold)" stroke="none" style="vertical-align:-2px"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg> 为国货点赞 <span id="guohuoCount" style="font-weight:700;min-width:2rem;display:inline-block">2,847</span>
     </button>
     <p style="font-size:.7rem;color:rgba(255,255,255,.3);margin-top:.5rem;">已有 <span id="guohuoCountDisplay" style="color:var(--gold)">2,847</span> 人为中国智造点赞</p>
