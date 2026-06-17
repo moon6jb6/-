@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI模型决策审计报告</title>
+    <style>
+        /* ── Reset & Base ──────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+            background: #f7fafc;
+            color: #2d3748;
+            line-height: 1.7;
+            padding: 0;
+        }
+
+        /* ── Container ─────────────────────────────────────────────── */
+        .report-container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 24px 20px 60px;
+        }
+
+        /* ── Header ────────────────────────────────────────────────── */
+        .report-header {
+            background: linear-gradient(135deg, #1a365d 0%, #2a4a7f 100%);
+            color: #fff;
+            padding: 36px 32px 28px;
+            border-radius: 12px;
+            margin-bottom: 28px;
+        }
+        .report-header h1 {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+        .report-header .subtitle {
+            font-size: 14px;
+            color: rgba(255,255,255,0.75);
+        }
+
+        /* ── Section Cards ─────────────────────────────────────────── */
+        .section {
+            background: #fff;
+            border-radius: 10px;
+            padding: 28px 28px 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+        .section h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a365d;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        /* ── Info Grid ─────────────────────────────────────────────── */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        .info-item {
+            background: #f7fafc;
+            padding: 14px 16px;
+            border-radius: 8px;
+        }
+        .info-item .label {
+            font-size: 12px;
+            color: #718096;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .info-item .value {
+            font-size: 15px;
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        /* ── Core Findings (Top 3) ─────────────────────────────────── */
+        .top-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 12px;
+        }
+        .feature-card {
+            flex: 1 1 200px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .feature-card.rank-1 {
+            background: linear-gradient(135deg, #fed7d7, #fff5f5);
+            border: 2px solid #fc8181;
+        }
+        .feature-card.rank-2 {
+            background: linear-gradient(135deg, #fefcbf, #fffff0);
+            border: 2px solid #f6e05e;
+        }
+        .feature-card.rank-3 {
+            background: linear-gradient(135deg, #c6f6d5, #f0fff4);
+            border: 2px solid #68d391;
+        }
+        .feature-card .rank-label {
+            font-size: 12px;
+            color: #718096;
+            margin-bottom: 6px;
+        }
+        .feature-card .feature-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a365d;
+            margin-bottom: 4px;
+        }
+        .feature-card .feature-value {
+            font-size: 14px;
+            color: #4a5568;
+        }
+
+        /* ── Attribution Table (Heatmap) ───────────────────────────── */
+        .heatmap-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            font-size: 14px;
+        }
+        .heatmap-table th {
+            text-align: left;
+            padding: 10px 12px;
+            background: #edf2f7;
+            color: #4a5568;
+            font-weight: 600;
+            border-bottom: 2px solid #cbd5e0;
+        }
+        .heatmap-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e2e8f0;
+            vertical-align: middle;
+        }
+        .heatmap-table tr:hover td {
+            background: #f7fafc;
+        }
+        .bar-cell {
+            position: relative;
+            min-width: 120px;
+        }
+        .bar-bg {
+            position: absolute;
+            left: 0; top: 4px; bottom: 4px;
+            border-radius: 4px;
+            opacity: 0.25;
+        }
+        .bar-value {
+            position: relative;
+            z-index: 1;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        /* ── Robustness Badges ─────────────────────────────────────── */
+        .robustness-list {
+            list-style: none;
+            padding: 0;
+        }
+        .robustness-list li {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 15px;
+        }
+        .robustness-list li:last-child {
+            border-bottom: none;
+        }
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            margin-right: 14px;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+        .badge-pass {
+            background: #c6f6d5;
+            color: #276749;
+        }
+        .badge-fail {
+            background: #fed7d7;
+            color: #9b2c2c;
+        }
+        .robustness-detail {
+            color: #718096;
+            font-size: 13px;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        /* ── Conclusion ────────────────────────────────────────────── */
+        .conclusion-box {
+            background: linear-gradient(135deg, #ebf8ff, #f0fff4);
+            border: 2px solid #90cdf4;
+            border-radius: 10px;
+            padding: 24px;
+            text-align: center;
+        }
+        .conclusion-box .summary-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a365d;
+            margin-bottom: 8px;
+        }
+        .conclusion-box .confidence {
+            display: inline-block;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .confidence-high {
+            background: #c6f6d5;
+            color: #276749;
+        }
+        .confidence-medium {
+            background: #fefcbf;
+            color: #975a16;
+        }
+        .confidence-low {
+            background: #fed7d7;
+            color: #9b2c2c;
+        }
+
+        /* ── Footer ────────────────────────────────────────────────── */
+        .report-footer {
+            text-align: center;
+            color: #a0aec0;
+            font-size: 12px;
+            margin-top: 32px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        /* ── Responsive ────────────────────────────────────────────── */
+        @media (max-width: 640px) {
+            .report-container { padding: 12px 10px 40px; }
+            .report-header { padding: 24px 18px 20px; }
+            .report-header h1 { font-size: 20px; }
+            .section { padding: 18px 16px; }
+            .info-grid { grid-template-columns: 1fr; }
+            .top-features { flex-direction: column; }
+            .heatmap-table { font-size: 13px; }
+            .heatmap-table th, .heatmap-table td { padding: 8px; }
+            .robustness-detail { display: block; margin-left: 42px; margin-top: 4px; text-align: left; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="report-container">
+
+    <!-- ─── Header ─────────────────────────────────────────────────── -->
+    <div class="report-header">
+        <h1>AI模型决策审计报告</h1>
+        <div class="subtitle">智信引擎 — 可解释性与归因分析平台</div>
+    </div>
+
+    <!-- ─── Section 1: Model Overview ──────────────────────────────── -->
+    <div class="section">
+        <h2>一、模型概况</h2>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="label">模型名称</div>
+                <div class="value">{{model_name}}</div>
+            </div>
+            <div class="info-item">
+                <div class="label">模型用途</div>
+                <div class="value">{{task_description}}</div>
+            </div>
+            <div class="info-item">
+                <div class="label">模型架构</div>
+                <div class="value">{{architecture}}</div>
+            </div>
+            <div class="info-item">
+                <div class="label">输入维度</div>
+                <div class="value">{{input_shape}}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── Section 2: Data Source ─────────────────────────────────── -->
+    <div class="section">
+        <h2>二、数据来源</h2>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="label">数据集名称</div>
+                <div class="value">{{dataset_name}}</div>
+            </div>
+            <div class="info-item">
+                <div class="label">样本数量</div>
+                <div class="value">{{sample_count}}</div>
+            </div>
+            <div class="info-item">
+                <div class="label">特征数量</div>
+                <div class="value">{{feature_count}}</div>
+            </div>
+            <div class="info-item">
+                <div class="label">归因方法</div>
+                <div class="value">{{attribution_method}}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── Section 3: Core Findings (Top 3) ──────────────────────── -->
+    <div class="section">
+        <h2>三、核心发现：最重要的三个特征</h2>
+        <div class="top-features">
+            <div class="feature-card rank-1">
+                <div class="rank-label">最重要</div>
+                <div class="feature-name">{{top1_name}}</div>
+                <div class="feature-value">贡献度: {{top1_value}}</div>
+            </div>
+            <div class="feature-card rank-2">
+                <div class="rank-label">第二重要</div>
+                <div class="feature-name">{{top2_name}}</div>
+                <div class="feature-value">贡献度: {{top2_value}}</div>
+            </div>
+            <div class="feature-card rank-3">
+                <div class="rank-label">第三重要</div>
+                <div class="feature-name">{{top3_name}}</div>
+                <div class="feature-value">贡献度: {{top3_value}}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── Section 4: Attribution Heatmap ─────────────────────────── -->
+    <div class="section">
+        <h2>四、特征归因明细</h2>
+        <p style="color:#718096; font-size:13px; margin-bottom:12px;">
+            下表展示了各特征对模型决策的贡献程度，颜色越深表示影响越大。
+        </p>
+        <table class="heatmap-table">
+            <thead>
+                <tr>
+                    <th style="width:40px;">排名</th>
+                    <th>特征名称</th>
+                    <th style="width:120px;">归因值</th>
+                    <th>贡献分布</th>
+                </tr>
+            </thead>
+            <tbody id="attribution-tbody">
+                <!-- Filled by JavaScript or server-side template engine -->
+                <tr>
+                    <td>1</td>
+                    <td>成交量偏离</td>
+                    <td>0.3421</td>
+                    <td class="bar-cell">
+                        <div class="bar-bg" style="width:100%; background:#e53e3e;"></div>
+                        <span class="bar-value">████████████████████</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>价格动量</td>
+                    <td>0.2156</td>
+                    <td class="bar-cell">
+                        <div class="bar-bg" style="width:63%; background:#dd6b20;"></div>
+                        <span class="bar-value">████████████▌</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>波动率指数</td>
+                    <td>0.1834</td>
+                    <td class="bar-cell">
+                        <div class="bar-bg" style="width:54%; background:#d69e2e;"></div>
+                        <span class="bar-value">██████████▊</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>买卖价差</td>
+                    <td>0.1102</td>
+                    <td class="bar-cell">
+                        <div class="bar-bg" style="width:32%; background:#38a169;"></div>
+                        <span class="bar-value">██████▍</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>订单簿深度</td>
+                    <td>0.0876</td>
+                    <td class="bar-cell">
+                        <div class="bar-bg" style="width:26%; background:#3182ce;"></div>
+                        <span class="bar-value">█████▏</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>资金流入</td>
+                    <td>0.0611</td>
+                    <td class="bar-cell">
+                        <div class="bar-bg" style="width:18%; background:#805ad5;"></div>
+                        <span class="bar-value">███▌</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="margin-top:12px; padding:12px; background:#f7fafc; border-radius:6px; font-size:13px; color:#4a5568;">
+            归因完整性检验：归因值之和与模型输出偏差为 <strong>{{completeness_error_pct}}%</strong>
+            （合格标准：小于1%）
+        </div>
+    </div>
+
+    <!-- ─── Section 5: Robustness Results ──────────────────────────── -->
+    <div class="section">
+        <h2>五、鲁棒性测试结果</h2>
+        <ul class="robustness-list">
+            <li>
+                <span class="badge badge-pass">&#10003;</span>
+                <span>归因一致性测试</span>
+                <span class="robustness-detail">3次运行标准差: {{consistency_std}}</span>
+            </li>
+            <li>
+                <span class="badge badge-pass">&#10003;</span>
+                <span>噪声扰动测试</span>
+                <span class="robustness-detail">加噪声后前三特征排序未变化</span>
+            </li>
+            <li>
+                <span class="badge badge-fail">&#10007;</span>
+                <span>分布外检测</span>
+                <span class="robustness-detail">检测到超出训练分布的输入</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- ─── Section 6: Conclusion ─────────────────────────────────── -->
+    <div class="section">
+        <h2>六、审计结论</h2>
+        <div class="conclusion-box">
+            <div class="summary-text">{{one_line_summary}}</div>
+            <div>
+                <span class="confidence confidence-high">置信度：高</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── Footer ─────────────────────────────────────────────────── -->
+    <div class="report-footer">
+        <p>审计时间：{{timestamp}}</p>
+        <p>报告编号：{{report_id}}</p>
+        <p>由智信引擎自动生成</p>
+    </div>
+
+</div>
+
+</body>
+</html>

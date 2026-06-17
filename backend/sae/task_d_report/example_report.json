@@ -1,0 +1,164 @@
+{
+  "meta": {
+    "report_id": "89565ca7-cf1e-4eb0-a905-688a402ddd92",
+    "timestamp": "2026-06-17T04:56:34.967411+00:00",
+    "platform_version": "v0.1.0"
+  },
+  "model_info": {
+    "architecture": "xgboost",
+    "model_name": "XGBClassifier-XGBClassifier",
+    "task": "binary_classification",
+    "input_shape": [
+      114,
+      30
+    ],
+    "output_shape": [
+      114,
+      1
+    ]
+  },
+  "data_info": {
+    "dataset_name": "sklearn breast_cancer",
+    "sample_count": 114,
+    "feature_names": [
+      "mean concave points",
+      "worst area",
+      "worst concave points",
+      "worst texture",
+      "area error",
+      "worst concavity",
+      "compactness error",
+      "worst symmetry",
+      "mean texture",
+      "symmetry error",
+      "worst perimeter",
+      "mean smoothness",
+      "mean area",
+      "worst radius",
+      "worst smoothness",
+      "mean concavity",
+      "concave points error",
+      "mean compactness",
+      "mean fractal dimension",
+      "perimeter error",
+      "radius error",
+      "fractal dimension error",
+      "concavity error",
+      "mean radius",
+      "smoothness error",
+      "texture error",
+      "mean symmetry",
+      "mean perimeter",
+      "worst compactness",
+      "worst fractal dimension"
+    ],
+    "data_hash": ""
+  },
+  "attribution": {
+    "method": "tree_shap",
+    "global_importance": {
+      "mean concave points": 0.12431,
+      "worst area": 0.116884,
+      "worst concave points": 0.096914,
+      "worst texture": 0.084095,
+      "area error": 0.078191,
+      "worst concavity": 0.077693,
+      "compactness error": 0.058443,
+      "worst symmetry": 0.041776,
+      "mean texture": 0.041706,
+      "symmetry error": 0.036157,
+      "worst perimeter": 0.032388,
+      "mean smoothness": 0.031914,
+      "mean area": 0.030161,
+      "worst radius": 0.026758,
+      "worst smoothness": 0.026237,
+      "mean concavity": 0.022682,
+      "concave points error": 0.020099,
+      "mean compactness": 0.016442,
+      "mean fractal dimension": 0.009338,
+      "perimeter error": 0.007249,
+      "radius error": 0.004704,
+      "fractal dimension error": 0.004136,
+      "concavity error": 0.004011,
+      "mean radius": 0.003426,
+      "smoothness error": 0.002867,
+      "texture error": 0.001418,
+      "mean symmetry": 0.0,
+      "mean perimeter": 0.0,
+      "worst compactness": 0.0,
+      "worst fractal dimension": 0.0
+    },
+    "single_sample": {
+      "input": [],
+      "output": 0.997254,
+      "attributions": [
+        1.480202,
+        1.188192,
+        0.928538,
+        0.697235,
+        0.601559,
+        0.515654,
+        -0.443443,
+        -0.436549,
+        0.394491,
+        -0.371569,
+        -0.32431,
+        0.262197,
+        0.206296,
+        0.169151,
+        -0.168477,
+        0.161272,
+        0.11879,
+        0.08159,
+        0.079848,
+        0.050609,
+        0.049563,
+        0.031888,
+        -0.025021,
+        -0.023092,
+        0.014556,
+        -0.013154,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "top_features": [
+        {
+          "feature": "worst area",
+          "attribution": 1.480202,
+          "rank": 1
+        },
+        {
+          "feature": "mean concave points",
+          "attribution": 1.188192,
+          "rank": 2
+        },
+        {
+          "feature": "worst concave points",
+          "attribution": 0.928538,
+          "rank": 3
+        }
+      ]
+    },
+    "completeness_check": {
+      "sum_attributions": 5.226017,
+      "output_minus_baseline": 5.894807,
+      "error_pct": 0.0
+    }
+  },
+  "robustness": {
+    "consistency_std": 0.0,
+    "noise_top3_unchanged": true,
+    "ood_warning": false
+  },
+  "conclusion": {
+    "top3_features": [
+      "worst area",
+      "mean concave points",
+      "worst concave points"
+    ],
+    "confidence": "high",
+    "one_line_summary": "真实CfC checkpoint无法加载(numpy版本不兼容: checkpoint需要numpy._core)，本报告使用XGBoost TreeSHAP归因展示统一格式能力。Top3特征: worst area, mean concave points, worst concave points。"
+  }
+}

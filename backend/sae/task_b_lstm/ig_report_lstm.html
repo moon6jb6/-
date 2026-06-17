@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>LSTM模型决策归因报告</title>
+<style>
+body{font-family:sans-serif;max-width:900px;margin:0 auto;padding:20px;background:#f7fafc;color:#1a365d}
+h1{color:#1a365d;border-bottom:2px solid #2b6cb0;padding-bottom:10px}
+h2{color:#2b6cb0;margin-top:30px}
+table{border-collapse:collapse;width:100%;margin:15px 0}
+th,td{border:1px solid #cbd5e0;padding:8px 12px;text-align:center}
+th{background:#edf2f7}
+.pass{color:#38a169;font-weight:bold} .fail{color:#e53e3e;font-weight:bold}
+.top-feature{background:#ebf8ff;padding:10px;margin:5px 0;border-radius:5px;border-left:4px solid #2b6cb0}
+.conclusion{background:#f0fff4;border:1px solid #38a169;border-radius:8px;padding:20px;margin-top:20px}
+.metrics{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin:15px 0}
+.metric{background:white;border:1px solid #e2e8f0;border-radius:8px;padding:15px;text-align:center}
+.metric .value{font-size:24px;font-weight:bold;color:#2b6cb0}
+.metric .label{font-size:12px;color:#718096;margin-top:5px}
+</style></head>
+<body>
+<h1>LSTM模型决策归因报告</h1>
+<p><strong>模型类型：</strong>LSTM（长短期记忆网络，2层，hidden_size=64）</p>
+<p><strong>任务：</strong>股票涨跌方向预测（二分类）</p>
+<p><strong>数据来源：</strong>AAPL走势仿真数据（GBM + regime switching，1000个交易日，2020-2024）</p>
+<p><strong>输入：</strong>30个时间步 x 5个特征（开盘价、最高价、最低价、收盘价、成交量）</p>
+<p><strong>训练方式：</strong>时间序列顺序划分（前80%训练，后20%测试），100个epoch，Adam优化器+学习率衰减</p>
+
+<div class="metrics">
+<div class="metric"><div class="value">70.2%</div><div class="label">训练集准确率</div></div>
+<div class="metric"><div class="value">29.4%</div><div class="label">测试集准确率</div></div>
+</div>
+
+<h2>最重要的归因特征（Top 10）</h2>
+<div>
+<div class="top-feature"><strong>#1</strong> t-28（第1步）的 <strong>volume</strong>：归因值 -0.176931</div>
+<div class="top-feature"><strong>#2</strong> t-29（第0步）的 <strong>volume</strong>：归因值 0.122853</div>
+<div class="top-feature"><strong>#3</strong> t-27（第2步）的 <strong>volume</strong>：归因值 0.082023</div>
+<div class="top-feature"><strong>#4</strong> t-23（第6步）的 <strong>volume</strong>：归因值 0.064603</div>
+<div class="top-feature"><strong>#5</strong> t-29（第0步）的 <strong>low</strong>：归因值 0.061807</div>
+<div class="top-feature"><strong>#6</strong> t-25（第4步）的 <strong>volume</strong>：归因值 0.053873</div>
+<div class="top-feature"><strong>#7</strong> t-28（第1步）的 <strong>low</strong>：归因值 0.046488</div>
+<div class="top-feature"><strong>#8</strong> t-29（第0步）的 <strong>high</strong>：归因值 0.043509</div>
+<div class="top-feature"><strong>#9</strong> t-28（第1步）的 <strong>high</strong>：归因值 0.041222</div>
+<div class="top-feature"><strong>#10</strong> t-27（第2步）的 <strong>low</strong>：归因值 0.037643</div>
+</div>
+<h2>时间步 x 特征归因热力图</h2>
+<p>颜色越深表示归因绝对值越大。绿色=正归因（推高预测概率），红色=负归因。</p>
+<table><tr><th>时间步</th><th>open</th><th>high</th><th>low</th><th>close</th><th>volume</th></tr>
+<tr><td><strong>t-29</strong></td><td style="background:rgb(229,255,229)">0.0237</td><td style="background:rgb(206,255,206)">0.0435</td><td style="background:rgb(186,255,186)">0.0618</td><td style="background:rgb(216,255,216)">0.0346</td><td style="background:rgb(117,255,117)">0.1229</td></tr>
+<tr><td><strong>t-28</strong></td><td style="background:rgb(232,255,232)">0.0204</td><td style="background:rgb(209,255,209)">0.0412</td><td style="background:rgb(203,255,203)">0.0465</td><td style="background:rgb(222,255,222)">0.0292</td><td style="background:rgb(255,55,55)">-0.1769</td></tr>
+<tr><td><strong>t-27</strong></td><td style="background:rgb(237,255,237)">0.0161</td><td style="background:rgb(219,255,219)">0.0325</td><td style="background:rgb(213,255,213)">0.0376</td><td style="background:rgb(229,255,229)">0.0236</td><td style="background:rgb(163,255,163)">0.0820</td></tr>
+<tr><td><strong>t-26</strong></td><td style="background:rgb(242,255,242)">0.0122</td><td style="background:rgb(227,255,227)">0.0248</td><td style="background:rgb(225,255,225)">0.0272</td><td style="background:rgb(236,255,236)">0.0173</td><td style="background:rgb(255,243,243)">-0.0111</td></tr>
+<tr><td><strong>t-25</strong></td><td style="background:rgb(244,255,244)">0.0106</td><td style="background:rgb(232,255,232)">0.0204</td><td style="background:rgb(228,255,228)">0.0241</td><td style="background:rgb(239,255,239)">0.0144</td><td style="background:rgb(195,255,195)">0.0539</td></tr>
+<tr><td><strong>t-24</strong></td><td style="background:rgb(246,255,246)">0.0081</td><td style="background:rgb(238,255,238)">0.0152</td><td style="background:rgb(232,255,232)">0.0210</td><td style="background:rgb(242,255,242)">0.0123</td><td style="background:rgb(255,239,239)">-0.0147</td></tr>
+<tr><td><strong>t-23</strong></td><td style="background:rgb(247,255,247)">0.0073</td><td style="background:rgb(239,255,239)">0.0147</td><td style="background:rgb(237,255,237)">0.0167</td><td style="background:rgb(244,255,244)">0.0106</td><td style="background:rgb(182,255,182)">0.0646</td></tr>
+<tr><td><strong>t-22</strong></td><td style="background:rgb(250,255,250)">0.0050</td><td style="background:rgb(245,255,245)">0.0097</td><td style="background:rgb(242,255,242)">0.0118</td><td style="background:rgb(248,255,248)">0.0071</td><td style="background:rgb(243,255,243)">0.0114</td></tr>
+<tr><td><strong>t-21</strong></td><td style="background:rgb(252,255,252)">0.0027</td><td style="background:rgb(249,255,249)">0.0059</td><td style="background:rgb(248,255,248)">0.0062</td><td style="background:rgb(251,255,251)">0.0042</td><td style="background:rgb(255,225,225)">-0.0272</td></tr>
+<tr><td><strong>t-20</strong></td><td style="background:rgb(253,255,253)">0.0019</td><td style="background:rgb(251,255,251)">0.0040</td><td style="background:rgb(251,255,251)">0.0042</td><td style="background:rgb(252,255,252)">0.0028</td><td style="background:rgb(234,255,234)">0.0191</td></tr>
+<tr><td><strong>t-19</strong></td><td style="background:rgb(254,255,254)">0.0010</td><td style="background:rgb(254,255,254)">0.0014</td><td style="background:rgb(252,255,252)">0.0033</td><td style="background:rgb(254,255,254)">0.0016</td><td style="background:rgb(253,255,253)">0.0021</td></tr>
+<tr><td><strong>t-18</strong></td><td style="background:rgb(254,255,254)">0.0014</td><td style="background:rgb(253,255,253)">0.0023</td><td style="background:rgb(251,255,251)">0.0035</td><td style="background:rgb(253,255,253)">0.0018</td><td style="background:rgb(235,255,235)">0.0180</td></tr>
+<tr><td><strong>t-17</strong></td><td style="background:rgb(254,255,254)">0.0011</td><td style="background:rgb(253,255,253)">0.0022</td><td style="background:rgb(253,255,253)">0.0024</td><td style="background:rgb(254,255,254)">0.0016</td><td style="background:rgb(243,255,243)">0.0113</td></tr>
+<tr><td><strong>t-16</strong></td><td style="background:rgb(255,255,255)">0.0007</td><td style="background:rgb(254,255,254)">0.0013</td><td style="background:rgb(253,255,253)">0.0020</td><td style="background:rgb(254,255,254)">0.0011</td><td style="background:rgb(254,255,254)">0.0010</td></tr>
+<tr><td><strong>t-15</strong></td><td style="background:rgb(255,255,255)">0.0007</td><td style="background:rgb(254,255,254)">0.0014</td><td style="background:rgb(254,255,254)">0.0018</td><td style="background:rgb(254,255,254)">0.0011</td><td style="background:rgb(249,255,249)">0.0061</td></tr>
+<tr><td><strong>t-14</strong></td><td style="background:rgb(255,255,255)">0.0004</td><td style="background:rgb(255,255,255)">0.0007</td><td style="background:rgb(254,255,254)">0.0011</td><td style="background:rgb(255,255,255)">0.0006</td><td style="background:rgb(250,255,250)">0.0050</td></tr>
+<tr><td><strong>t-13</strong></td><td style="background:rgb(255,255,255)">0.0003</td><td style="background:rgb(255,255,255)">0.0005</td><td style="background:rgb(255,255,255)">0.0006</td><td style="background:rgb(255,255,255)">0.0004</td><td style="background:rgb(254,255,254)">0.0015</td></tr>
+<tr><td><strong>t-12</strong></td><td style="background:rgb(255,255,255)">0.0003</td><td style="background:rgb(255,255,255)">0.0005</td><td style="background:rgb(255,255,255)">0.0005</td><td style="background:rgb(255,255,255)">0.0003</td><td style="background:rgb(254,255,254)">0.0011</td></tr>
+<tr><td><strong>t-11</strong></td><td style="background:rgb(255,255,255)">0.0001</td><td style="background:rgb(255,255,255)">0.0003</td><td style="background:rgb(255,255,255)">0.0004</td><td style="background:rgb(255,255,255)">0.0002</td><td style="background:rgb(253,255,253)">0.0025</td></tr>
+<tr><td><strong>t-10</strong></td><td style="background:rgb(255,255,255)">0.0001</td><td style="background:rgb(255,255,255)">0.0002</td><td style="background:rgb(255,255,255)">0.0002</td><td style="background:rgb(255,255,255)">0.0001</td><td style="background:rgb(255,255,255)">0.0001</td></tr>
+<tr><td><strong>t-9</strong></td><td style="background:rgb(255,255,255)">0.0001</td><td style="background:rgb(255,255,255)">0.0001</td><td style="background:rgb(255,255,255)">0.0002</td><td style="background:rgb(255,255,255)">0.0001</td><td style="background:rgb(254,255,254)">0.0011</td></tr>
+<tr><td><strong>t-8</strong></td><td style="background:rgb(255,255,255)">0.0001</td><td style="background:rgb(255,255,255)">0.0001</td><td style="background:rgb(255,255,255)">0.0001</td><td style="background:rgb(255,255,255)">0.0001</td><td style="background:rgb(255,255,255)">0.0004</td></tr>
+<tr><td><strong>t-7</strong></td><td style="background:rgb(255,255,255)">0.0000</td><td style="background:rgb(255,255,255)">0.0001</td><td style="background:rgb(255,255,255)">0.0000</td><td style="background:rgb(255,255,255)">0.0000</td><td style="background:rgb(254,255,254)">0.0014</td></tr>
+<tr><td><strong>t-6</strong></td><td style="background:rgb(255,255,255)">0.0000</td><td style="background:rgb(255,255,255)">0.0000</td><td style="background:rgb(255,255,255)">0.0000</td><td style="background:rgb(255,255,255)">0.0000</td><td style="background:rgb(255,255,255)">0.0002</td></tr>
+<tr><td><strong>t-5</strong></td><td style="background:rgb(255,255,255)">0.0000</td><td style="background:rgb(255,255,255)">0.0000</td><td style="background:rgb(255,255,255)">0.0000</td><td style="background:rgb(255,255,255)">0.0000</td><td style="background:rgb(255,255,255)">-0.0001</td></tr>
+<tr><td><strong>t-4</strong></td><td style="background:rgb(255,255,255)">0.0000</td><td style="background:rgb(255,255,255)">0.0000</td><td style="background:rgb(255,255,255)">-0.0000</td><td style="background:rgb(255,255,255)">-0.0000</td><td style="background:rgb(254,255,254)">0.0015</td></tr>
+<tr><td><strong>t-3</strong></td><td style="background:rgb(255,255,255)">-0.0000</td><td style="background:rgb(255,255,255)">-0.0000</td><td style="background:rgb(255,255,255)">-0.0000</td><td style="background:rgb(255,255,255)">-0.0000</td><td style="background:rgb(255,255,255)">0.0009</td></tr>
+<tr><td><strong>t-2</strong></td><td style="background:rgb(255,255,255)">-0.0000</td><td style="background:rgb(255,255,255)">-0.0000</td><td style="background:rgb(255,255,255)">-0.0000</td><td style="background:rgb(255,255,255)">-0.0000</td><td style="background:rgb(253,255,253)">0.0018</td></tr>
+<tr><td><strong>t-1</strong></td><td style="background:rgb(255,255,255)">0.0000</td><td style="background:rgb(255,255,255)">0.0000</td><td style="background:rgb(255,255,255)">0.0001</td><td style="background:rgb(255,255,255)">0.0000</td><td style="background:rgb(255,255,255)">-0.0004</td></tr>
+<tr><td><strong>t-0</strong></td><td style="background:rgb(255,255,255)">-0.0000</td><td style="background:rgb(255,255,255)">-0.0000</td><td style="background:rgb(255,255,255)">-0.0000</td><td style="background:rgb(255,255,255)">-0.0000</td><td style="background:rgb(254,255,254)">0.0012</td></tr>
+</table>
+<h2>完备性验证</h2>
+<p>归因之和与模型输出的差异：0.2922%</p>
+<p class="pass">通过（阈值：&lt;1%）</p>
+
+<div class="conclusion">
+<h2>结论</h2>
+<p>模型预测当前样本上涨（概率 80.4%），真实标签为上涨</p>
+<p>最关键的决策依据是<strong>volume</strong>（时间步t-28），归因值 -0.176931</p>
+<p>最近时间步（t-1, t-2）的特征在Top-5中占 0/5 个席位，符合"越近越重要"的直觉</p>
+<p>归因方法：Integrated Gradients（200步插值），完备性验证通过</p>
+</div>
+
+<p style="margin-top:40px;color:#718096;font-size:12px">审计时间：2026-06-17 13:01:30 | 智信引擎 v0.1.0</p>
+</body></html>

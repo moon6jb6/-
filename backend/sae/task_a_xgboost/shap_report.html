@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>XGBoost TreeSHAP 归因报告</title>
+<style>
+body { font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+       max-width: 900px; margin: 40px auto; padding: 20px;
+       background: #f9f9f9; color: #333; }
+h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+h2 { color: #2980b9; margin-top: 30px; }
+table { width: 100%; border-collapse: collapse; margin: 10px 0 20px 0; }
+th, td { border: 1px solid #ddd; padding: 8px 12px; text-align: left; }
+th { background: #3498db; color: white; }
+tr:nth-child(even) { background: #f2f2f2; }
+.bar { background: #3498db; height: 16px; border-radius: 3px; }
+.metric-box { display: inline-block; margin: 10px; padding: 20px;
+               background: white; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+               min-width: 160px; text-align: center; }
+.metric-box .value { font-size: 28px; font-weight: bold; color: #2c3e50; }
+.metric-box .label { font-size: 13px; color: #888; margin-top: 5px; }
+.pass { color: #27ae60; font-weight: bold; }
+.footer { margin-top: 40px; padding-top: 15px; border-top: 1px solid #ddd;
+           font-size: 12px; color: #aaa; text-align: center; }
+</style>
+</head>
+<body>
+
+<h1>XGBoost TreeSHAP 归因报告</h1>
+<p>本报告基于乳腺癌数据集（569 个样本、30 个特征），使用 XGBoost 模型进行二分类（良性/恶性），
+并通过 TreeSHAP 方法对模型的预测结果进行归因分析，解释每个特征对模型决策的贡献。</p>
+
+<div style="display:flex; flex-wrap:wrap;">
+  <div class="metric-box"><div class="value">95.6%</div><div class="label">模型准确率</div></div>
+  <div class="metric-box"><div class="value">114</div><div class="label">测试样本数</div></div>
+  <div class="metric-box"><div class="value">30</div><div class="label">特征数量</div></div>
+  <div class="metric-box"><div class="value" style="color:#27ae60">通过</div><div class="label">完备性验证</div></div>
+</div>
+
+<h2>一、全局特征重要性（Top 10）</h2>
+<p>以下特征按其对模型预测的平均绝对贡献排序。数值越大，说明该特征对模型决策的影响越显著。</p>
+<table>
+<tr><th>排名</th><th>特征名称</th><th>平均 |SHAP| 值</th><th>相对重要性</th></tr>
+<tr><td>1</td><td>mean concave points</td><td>1.251806</td><td><div class="bar" style="width:100.0%"></div></td></tr>
+<tr><td>2</td><td>worst area</td><td>1.177029</td><td><div class="bar" style="width:94.0%"></div></td></tr>
+<tr><td>3</td><td>worst concave points</td><td>0.975928</td><td><div class="bar" style="width:78.0%"></div></td></tr>
+<tr><td>4</td><td>worst texture</td><td>0.846842</td><td><div class="bar" style="width:67.6%"></div></td></tr>
+<tr><td>5</td><td>area error</td><td>0.787382</td><td><div class="bar" style="width:62.9%"></div></td></tr>
+<tr><td>6</td><td>worst concavity</td><td>0.782375</td><td><div class="bar" style="width:62.5%"></div></td></tr>
+<tr><td>7</td><td>compactness error</td><td>0.588523</td><td><div class="bar" style="width:47.0%"></div></td></tr>
+<tr><td>8</td><td>worst symmetry</td><td>0.420688</td><td><div class="bar" style="width:33.6%"></div></td></tr>
+<tr><td>9</td><td>mean texture</td><td>0.419982</td><td><div class="bar" style="width:33.6%"></div></td></tr>
+<tr><td>10</td><td>symmetry error</td><td>0.364100</td><td><div class="bar" style="width:29.1%"></div></td></tr>
+
+</table>
+
+<h2>二、单样本归因分析（测试集第 1 条）</h2>
+<p>以下展示了模型对第一条测试样本的预测归因。正值表示该特征将预测推向"恶性"，
+负值表示推向"良性"。颜色区分了推力方向。</p>
+<table>
+<tr><th>排名</th><th>特征名称</th><th>SHAP 值</th><th>影响方向</th></tr>
+<tr><td>1</td><td>worst area</td><td style="color:#e74c3c">+1.480202</td><td style="color:#e74c3c">正向（推向恶性）</td></tr>
+<tr><td>2</td><td>mean concave points</td><td style="color:#e74c3c">+1.188192</td><td style="color:#e74c3c">正向（推向恶性）</td></tr>
+<tr><td>3</td><td>worst concave points</td><td style="color:#e74c3c">+0.928538</td><td style="color:#e74c3c">正向（推向恶性）</td></tr>
+<tr><td>4</td><td>compactness error</td><td style="color:#e74c3c">+0.697235</td><td style="color:#e74c3c">正向（推向恶性）</td></tr>
+<tr><td>5</td><td>worst texture</td><td style="color:#e74c3c">+0.601559</td><td style="color:#e74c3c">正向（推向恶性）</td></tr>
+<tr><td>6</td><td>worst perimeter</td><td style="color:#e74c3c">+0.515654</td><td style="color:#e74c3c">正向（推向恶性）</td></tr>
+<tr><td>7</td><td>worst symmetry</td><td style="color:#27ae60">-0.443443</td><td style="color:#27ae60">负向（推向良性）</td></tr>
+<tr><td>8</td><td>worst concavity</td><td style="color:#27ae60">-0.436549</td><td style="color:#27ae60">负向（推向良性）</td></tr>
+<tr><td>9</td><td>mean texture</td><td style="color:#e74c3c">+0.394491</td><td style="color:#e74c3c">正向（推向恶性）</td></tr>
+<tr><td>10</td><td>worst smoothness</td><td style="color:#27ae60">-0.371569</td><td style="color:#27ae60">负向（推向良性）</td></tr>
+
+</table>
+
+<h2>三、SHAP 完备性验证</h2>
+<p>SHAP 方法的数学保证：所有特征的 SHAP 值之和加上基值，应当等于模型对该样本的预测概率。
+以下是验证结果：</p>
+<table>
+<tr><th>项目</th><th>数值</th></tr>
+<tr><td>基值（模型期望输出）</td><td>0.668790</td></tr>
+<tr><td>SHAP 值之和</td><td>5.226017</td></tr>
+<tr><td>基值 + SHAP 之和</td><td>5.894807</td></tr>
+<tr><td>模型原始输出（log-odds）</td><td>5.894808</td></tr>
+<tr><td>模型预测概率</td><td>0.997254</td></tr>
+<tr><td>绝对误差</td><td>0.00000131</td></tr>
+<tr><td>相对误差</td><td>0.0000%</td></tr>
+<tr><td>验证结果（阈值 1%）</td><td class="pass">通过</td></tr>
+</table>
+
+<h2>四、结论</h2>
+<p>本报告使用 TreeSHAP 对 XGBoost 乳腺癌分类模型进行了完整的归因分析。
+SHAP 完备性验证<span class="pass">通过</span>（相对误差 0.0000%，阈值 1%），
+说明归因结果具有数学一致性。全局特征重要性和单样本归因均符合医学领域对乳腺癌诊断指标的先验认知。</p>
+
+<div class="footer">
+  智信引擎 - AI 决策可追溯平台 | XGBoost TreeSHAP 归因报告
+</div>
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+{
+  "model_type": "LSTM",
+  "task": "stock_direction_prediction",
+  "data_source": "AAPL-like synthetic data (GBM + regime switching, 1000 trading days, 2020-2024)",
+  "input_shape": [
+    30,
+    5
+  ],
+  "features": [
+    "open",
+    "high",
+    "low",
+    "close",
+    "volume"
+  ],
+  "train_accuracy": 0.7021,
+  "test_accuracy": 0.2938,
+  "single_sample": {
+    "output_probability": 0.8038,
+    "predicted_class": 1,
+    "true_class": 1,
+    "sample_index": 0,
+    "description": "First test sample (most recent window)"
+  },
+  "attribution": {
+    "method": "integrated_gradients",
+    "n_steps": 200,
+    "top_features": [
+      {
+        "time_step": 1,
+        "feature": "volume",
+        "attribution": -0.17693105340003967,
+        "rank": 1
+      },
+      {
+        "time_step": 0,
+        "feature": "volume",
+        "attribution": 0.12285322695970535,
+        "rank": 2
+      },
+      {
+        "time_step": 2,
+        "feature": "volume",
+        "attribution": 0.08202269673347473,
+        "rank": 3
+      },
+      {
+        "time_step": 6,
+        "feature": "volume",
+        "attribution": 0.06460296362638474,
+        "rank": 4
+      },
+      {
+        "time_step": 0,
+        "feature": "low",
+        "attribution": 0.06180679053068161,
+        "rank": 5
+      },
+      {
+        "time_step": 4,
+        "feature": "volume",
+        "attribution": 0.053873103111982346,
+        "rank": 6
+      },
+      {
+        "time_step": 1,
+        "feature": "low",
+        "attribution": 0.04648801311850548,
+        "rank": 7
+      },
+      {
+        "time_step": 0,
+        "feature": "high",
+        "attribution": 0.04350881278514862,
+        "rank": 8
+      },
+      {
+        "time_step": 1,
+        "feature": "high",
+        "attribution": 0.04122152179479599,
+        "rank": 9
+      },
+      {
+        "time_step": 2,
+        "feature": "low",
+        "attribution": 0.03764323517680168,
+        "rank": 10
+      }
+    ],
+    "recent_timesteps_in_top5": 0
+  },
+  "completeness_check": {
+    "error_pct": 0.2922,
+    "threshold": 1.0,
+    "pass": true
+  }
+}
