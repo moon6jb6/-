@@ -30,7 +30,7 @@ class ModelRegisterRequest(BaseModel):
     type: str = Field(default="classifier", description="模型类型: classifier / regressor")
     framework: str = Field(..., description="框架: xgboost / pytorch / lstm / tensorflow")
     version: str = Field(default="1.0.0", description="版本号")
-    file_hash: str = Field(default="", description="模型文件SHA256哈希")
+    file_hash: Optional[str] = Field(default=None, description="模型文件SHA256哈希")
 
 
 # ── 数据漂移 ────────────────────────────────────────────────────────────

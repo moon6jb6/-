@@ -52,6 +52,7 @@ class ModelRegisterResponse(BaseModel):
     name: str
     framework: str
     version: str
+    sha256_verified: bool = False
     created_at: str
 
 
@@ -59,7 +60,19 @@ class ModelVersion(BaseModel):
     """模型版本信息"""
     version: str
     file_hash: str
+    sha256_verified: bool = False
     created_at: str
+
+
+class ModelListResponse(BaseModel):
+    """GET /v1/models 响应"""
+    models: list
+    total: int
+
+
+class ModelDeleteResponse(BaseModel):
+    """DELETE /v1/models/{model_id} 响应"""
+    message: str
 
 
 class ModelVersionsResponse(BaseModel):

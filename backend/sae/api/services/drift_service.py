@@ -10,12 +10,27 @@ from typing import Any
 import numpy as np
 
 
-def _generate_synthetic_distribution(seed: int, n_features: int = 5,
-                                     n_bins: int = 10) -> dict[str, np.ndarray]:
-    """生成合成数据分布（用于演示 PSI 计算）。
+def _distribution_from_csv(csv_path: str, columns: list = None,
+                           bins: int = 10) -> dict:
+    """从 CSV 文件计算特征分布。"""
+    import pandas as pd
+    df = pd.read_csv(csv_path)
+    numeric_cols = columns or df.select_dtypes(include=[np.number]).columns.tolist()
+    distributions = {}
+    for col in numeric_cols:
+        values = df[col].dropna().values
+        if len(values) == 0:
+            continue
+        hist, _ = np.histogram(values, bins=bins)
+        prob = hist.astype(float) + 1e-6
+        prob = prob / prob.sum()
+        distributions[col] = prob
+    return distributions
 
-    实际生产中应从数据集加载真实分布。
-    """
+
+def _generate_synthetic_distribution(seed: int, n_features: int = 5,
+                                     n_bins: int = 10) -> dict:
+    """生成合成数据分布（用于演示 PSI 计算）。"""
     rng = np.random.RandomState(seed)
     features = {}
     feature_names = ["income", "credit_score", "debt_ratio", "loan_amount", "employment_years"]
@@ -69,20 +84,20 @@ def _psi_to_alert(psi: float) -> dict[str, str]:
 
 def compute_drift(
     dataset_id: str,
-    reference_period: list[str],
-    target_period: list[str],
+    reference_period: list,
+    target_period: list,
+    reference_file: str = None,
+    target_file: str = None,
 ) -> dict[str, Any]:
-    """计算数据漂移。
-
-    实现真实的 PSI 计算逻辑。
-    当前使用合成数据演示；生产环境中应连接实际数据源。
-    """
-    # 用数据集ID和时间段作为种子，确保同一参数返回一致结果
-    ref_seed = hash(f"{dataset_id}_{reference_period}") % (2**31)
-    tgt_seed = hash(f"{dataset_id}_{target_period}") % (2**31)
-
-    ref_dist = _generate_synthetic_distribution(seed=ref_seed)
-    tgt_dist = _generate_synthetic_distribution(seed=tgt_seed)
+    """计算数据漂移。支持从CSV文件加载真实分布。"""
+    if reference_file and target_file:
+        ref_dist = _distribution_from_csv(reference_file)
+        tgt_dist = _distribution_from_csv(target_file)
+    else:
+        ref_seed = hash(f"{dataset_id}_{reference_period}") % (2**31)
+        tgt_seed = hash(f"{dataset_id}_{target_period}") % (2**31)
+        ref_dist = _generate_synthetic_distribution(seed=ref_seed)
+        tgt_dist = _generate_synthetic_distribution(seed=tgt_seed)
 
     feature_drift: dict[str, float] = {}
     total_psi = 0.0
