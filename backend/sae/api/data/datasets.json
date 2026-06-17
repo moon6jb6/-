@@ -1,0 +1,55 @@
+{
+  "datasets": {
+    "ds_f833aaa8bfed": {
+      "dataset_id": "ds_f833aaa8bfed",
+      "name": "Yahoo Finance Raw Data",
+      "source": "Yahoo Finance API",
+      "columns": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "adj_close",
+        "volume"
+      ],
+      "row_count": 5000,
+      "created_at": "2026-06-17T05:42:10.133830+00:00",
+      "lineage": {
+        "parents": [],
+        "transformations": [],
+        "children": []
+      }
+    },
+    "ds_aapl_stock": {
+      "dataset_id": "ds_aapl_stock",
+      "name": "AAPL Stock Data",
+      "source": "task_b_lstm/aapl_daily.csv",
+      "columns": [
+        "date",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "row_count": 1000,
+      "created_at": "2026-06-17T05:42:10.137345+00:00",
+      "lineage": {
+        "parents": [
+          {
+            "dataset_id": "ds_yahoo_raw",
+            "name": "Yahoo Finance Raw Data"
+          }
+        ],
+        "transformations": [
+          {
+            "type": "etl",
+            "description": "日线OHLCV提取，去除非交易日"
+          }
+        ],
+        "children": []
+      }
+    }
+  }
+}

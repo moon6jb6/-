@@ -1,0 +1,21 @@
+{
+  "models": {
+    "mdl_6df05a40afd3": {
+      "model_id": "mdl_6df05a40afd3",
+      "name": "Test Model",
+      "type": "classifier",
+      "framework": "xgboost",
+      "created_at": "2026-06-17T05:41:20.708513+00:00"
+    }
+  },
+  "versions": {
+    "mdl_6df05a40afd3": [
+      {
+        "version": "1.0",
+        "file_hash": "sha256:abc123",
+        "sha256_verified": false,
+        "created_at": "2026-06-17T05:41:20.708513+00:00"
+      }
+    ]
+  }
+}
